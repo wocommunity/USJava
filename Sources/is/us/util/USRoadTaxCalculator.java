@@ -1,12 +1,14 @@
 package is.us.util;
 
 /**
- * Calculates the amount of money you have to pay the government for owning your car.
- * You pay this twice a year.
+ * Calculates the amount of money you  pay the government for owning your car.
+ * Paid twice a year.
  * 
  * http://www.rsk.is/einstakl/skattar/bifreida
  * 
  * @author Hugi Thordarson
+ * 
+ * TODO: Monetary values should be represented by BigDecimal.
  */
 
 public class USRoadTaxCalculator {
