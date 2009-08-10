@@ -1,14 +1,17 @@
 package is.us.util;
 
 /**
- * Calculates the amount of money you  pay the government for owning your car.
- * Paid twice a year.
+ * Calculates the amount of money you  pay the government for owning your car, twice a year.
+ * The tax is based on the weight of the vehicle. Note that current regulations dictate that
+ * vehicles < 400kgs in weight are not taxed. this calculator does not take that into account.
+ * 
+ * The basis for these calculations can be found at:
  * 
  * http://www.rsk.is/einstakl/skattar/bifreida
  * 
  * @author Hugi Thordarson
  * 
- * FIXME: Even though this value is only used for estimations, monetary values should be represented by BigDecimal for optimal accuracy.
+ * TODO: Even though this class is currently only used to calculate estimates, monetary values should be represented by BigDecimal for optimal accuracy.
  */
 
 public class USRoadTaxCalculator {
