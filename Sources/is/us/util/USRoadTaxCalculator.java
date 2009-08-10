@@ -8,7 +8,7 @@ package is.us.util;
  * 
  * @author Hugi Thordarson
  * 
- * TODO: Monetary values should be represented by BigDecimal.
+ * FIXME: Even though this value is only used for estimations, monetary values should be represented by BigDecimal for optimal accuracy.
  */
 
 public class USRoadTaxCalculator {
