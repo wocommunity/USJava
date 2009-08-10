@@ -99,7 +99,7 @@ public class USRoadTaxCalculator {
 	/**
 	 * @return The part of the tax paid for weight < FIRST_CATEGORY_WEIGHT.
 	 */
-	public double firstAmount() {
+	private double firstAmount() {
 		if( weight() < FIRST_CATEGORY_WEIGHT ) {
 			return weight() * FIRST_CATEGORY_PRICE;
 		}
@@ -110,7 +110,7 @@ public class USRoadTaxCalculator {
 	/**
 	 * @return The part of the tax paid for weight between FIRST_CATEGORY_WEIGHT and FIRST_CATEGORY_WEIGHT + SECOND_CATEGORY_WEIGHT
 	 */
-	public double secondAmount() {
+	private double secondAmount() {
 
 		if( weight() <= FIRST_CATEGORY_WEIGHT ) {
 			return 0d;
@@ -126,7 +126,7 @@ public class USRoadTaxCalculator {
 	/**
 	 * @return The part of the tax paid for weight above FIRST_CATEGORY_WEIGHT + SECOND_CATEGORY_WEIGHT
 	 */
-	public double thirdAmount() {
+	private double thirdAmount() {
 
 		if( weight() <= (FIRST_CATEGORY_WEIGHT + SECOND_CATEGORY_WEIGHT) ) {
 			return 0d;
