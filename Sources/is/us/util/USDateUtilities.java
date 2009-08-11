@@ -219,10 +219,4 @@ public class USDateUtilities {
 
 		return calendar.getTime();
 	}
-
-	/**
-	 * @return
-	 *
-	public static Date dateByAddingGregorianUnits(  )
-	*/
 }
