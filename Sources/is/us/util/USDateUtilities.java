@@ -22,9 +22,6 @@ public class USDateUtilities {
 	 * @param anotherDate
 	 * @return number of days between dates, where 0 is returned when the dates are the same day
 	 * @throws USDateException if either date is null
-	 * 
-	 * @author Logi Helgu
-	 * @reviewedBy Bjarni Sævarsson
 	 */
 	public static Long numberOfDaysBetweenDates( Date date, Date anotherDate ) {
 
@@ -51,9 +48,6 @@ public class USDateUtilities {
 	 * @param date the date to compare with todays date
 	 * @return number of days from date to today
 	 * @throws USDateException if either date is null
-	 * 
-	 * @author Logi Helgu
-	 * @reviewedBy Bjarni Sævarsson
 	 */
 	public static Long numberOfDaysFromToday( Date date ) {
 		return numberOfDaysBetweenDates( date, new Date() );
@@ -62,7 +56,6 @@ public class USDateUtilities {
 	/**
 	 * @param the date to normalized
 	 * @return the given date normalized to midnight
-	 * @author Atli Páll Hafsteinsson
 	 * @reviewedby Logi Helgu at Jun 24, 2009( see JIRA issue INN-622 )
 	 */
 	public static Date normalizeToMidnight( Date date ) {
@@ -75,8 +68,6 @@ public class USDateUtilities {
 	/**
 	 * @param calendar the calendar to normalize
 	 * @return the given calendar normalized to midnight
-	 * @author Atli Páll Hafsteinsson
-	 * @reviewedby Logi Helgu at Jun 24, 2009( see JIRA issue INN-622 )
 	 */
 	public static GregorianCalendar normalizeToMidnight( GregorianCalendar calendar ) {
 		calendar.set( Calendar.HOUR_OF_DAY, 0 );
@@ -88,11 +79,10 @@ public class USDateUtilities {
 
 	/**
 	 * Adds the given number of days to the given date
+	 * 
 	 * @param date the date to add days to
 	 * @param days the number of days to add, use a negative number for subtraction
 	 * @return the given date with the given days added
-	 * @author Atli Páll Hafsteinsson
-	 * @reviewedby Logi Helgu at Jun 24, 2009( see JIRA issue INN-622 )
 	 */
 	public static Date addDays( Date date, int days ) {
 		GregorianCalendar c = (GregorianCalendar)GregorianCalendar.getInstance();
@@ -105,9 +95,6 @@ public class USDateUtilities {
 	/**
 	 * @return true if the given date is not older than 7 days, otherwise false
 	 * @param date the date to check
-	 * 
-	 * @author Atli Páll Hafsteinsson
-	 * @reviewedby Logi Helgu at Jun 24, 2009( see JIRA issue INN-622 )
 	 */
 	public static boolean isNotOlderThanSevenDays( Date date ) {
 		Date sevenDaysAgo = addDays( normalizeToMidnight( new Date() ), -7 );
@@ -121,9 +108,6 @@ public class USDateUtilities {
 
 	/**
 	 * @return true if the given date is today, otherwise false
-	 * @author Atli Páll Hafsteinsson
-	 * 
-	 * @reviewedby Logi Helgu at Jun 24, 2009( see JIRA issue INN-622 )
 	 */
 	public static boolean isToday( Date date ) {
 		GregorianCalendar today = (GregorianCalendar)GregorianCalendar.getInstance();
