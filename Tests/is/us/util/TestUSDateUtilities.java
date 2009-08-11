@@ -1,6 +1,6 @@
 package is.us.util;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 import java.text.*;
 import java.util.*;
@@ -116,43 +116,29 @@ public class TestUSDateUtilities {
 
 	@Test
 	public void ageAtDate() {
-		Date birthdate = date( 1979, 11, 9 );
+		Date birthdate = USDateUtilities.date( 1979, 11, 9 );
 		Integer expected = null;
 		Integer result = null;
 
 		expected = 19;
-		result = USDateUtilities.ageAtDate( birthdate, date( 1999, 11, 8 ) );
+		result = USDateUtilities.ageAtDate( birthdate, USDateUtilities.date( 1999, 11, 8 ) );
 		assertEquals( expected, result );
 
 		expected = 20;
-		result = USDateUtilities.ageAtDate( birthdate, date( 1999, 11, 9 ) );
+		result = USDateUtilities.ageAtDate( birthdate, USDateUtilities.date( 1999, 11, 9 ) );
 		assertEquals( expected, result );
 
 		expected = 20;
-		result = USDateUtilities.ageAtDate( birthdate, date( 1999, 11, 10 ) );
+		result = USDateUtilities.ageAtDate( birthdate, USDateUtilities.date( 1999, 11, 10 ) );
 		assertEquals( expected, result );
 
 		expected = 21;
-		result = USDateUtilities.ageAtDate( birthdate, date( 2000, 11, 10 ) );
+		result = USDateUtilities.ageAtDate( birthdate, USDateUtilities.date( 2000, 11, 10 ) );
 		assertEquals( expected, result );
 	}
 
-	/**
-	 * Constructs a date at midnight on the given day.
-	 * 
-	 * Please note that months are not zero-based - january = 1.
-	 */
-	private static Date date( int year, int month, int day ) {
-		GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
-		calendar.clear();
-		calendar.set( Calendar.YEAR, year );
-		calendar.set( Calendar.MONTH, month + 1 );
-		calendar.set( Calendar.DAY_OF_MONTH, day );
-		calendar.set( Calendar.HOUR_OF_DAY, 0 );
-		calendar.set( Calendar.MINUTE, 0 );
-		calendar.set( Calendar.SECOND, 0 );
-		calendar.set( Calendar.MILLISECOND, 0 );
-
-		return calendar.getTime();
+	@Test
+	public void date() {
+		fail();
 	}
 }

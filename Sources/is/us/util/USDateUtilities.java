@@ -194,26 +194,51 @@ public class USDateUtilities {
 	 * @return The person's age at [date]
 	 */
 	public static Integer ageAtDate( Date birthDate, Date date ) {
-	
+
 		if( birthDate == null || date == null ) {
 			return null;
 		}
-	
+
 		GregorianCalendar dateCalendar = (GregorianCalendar)GregorianCalendar.getInstance();
 		dateCalendar.setTime( date );
-	
+
 		GregorianCalendar birthdateCalendar = (GregorianCalendar)GregorianCalendar.getInstance();
 		birthdateCalendar.setTime( birthDate );
-	
+
 		int ageInYears = dateCalendar.get( Calendar.YEAR ) - birthdateCalendar.get( Calendar.YEAR );
-	
+
 		if( (birthdateCalendar.get( Calendar.MONTH ) == dateCalendar.get( Calendar.MONTH )) && (birthdateCalendar.get( Calendar.DAY_OF_MONTH ) <= dateCalendar.get( Calendar.DAY_OF_MONTH )) ) {
 			return ageInYears;
 		}
 		else if( birthdateCalendar.get( Calendar.MONTH ) < dateCalendar.get( Calendar.MONTH ) ) {
 			return ageInYears;
 		}
-	
+
 		return ageInYears - 1;
 	}
+
+	/**
+	 * Constructs a date at midnight on the given day.
+	 * 
+	 * Please note that months are not zero-based! That means January = 1.
+	 */
+	public static Date date( int year, int month, int day ) {
+		GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
+		calendar.clear();
+		calendar.set( Calendar.YEAR, year );
+		calendar.set( Calendar.MONTH, month + 1 );
+		calendar.set( Calendar.DAY_OF_MONTH, day );
+		calendar.set( Calendar.HOUR_OF_DAY, 0 );
+		calendar.set( Calendar.MINUTE, 0 );
+		calendar.set( Calendar.SECOND, 0 );
+		calendar.set( Calendar.MILLISECOND, 0 );
+
+		return calendar.getTime();
+	}
+
+	/**
+	 * @return
+	 *
+	public static Date dateByAddingGregorianUnits(  )
+	*/
 }
