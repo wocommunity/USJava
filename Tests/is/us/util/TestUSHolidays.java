@@ -25,14 +25,18 @@ public class TestUSHolidays {
 
 			h = new USHolidays( 2000 );
 			Date date = df.parse( "20000101 0000000" );
-			assertEquals( true, h.isHoliday( date ) );
+			assertTrue( h.isHoliday( date ) );
 
 			date = df.parse( "20000102 0000000" );
-			assertEquals( false, h.isHoliday( date ) );
+			assertFalse( h.isHoliday( date ) );
 
 			h = new USHolidays( 2014 );
 			date = df.parse( "20140420 0000000" );
-			assertEquals( true, h.isHoliday( date ) );
+			assertTrue( h.isHoliday( date ) );
+
+			h = new USHolidays( 2010 );
+			date = df.parse( "20101224 0100100" );
+			assertTrue( h.isHoliday( date ) );
 		}
 		catch( ParseException e ) {
 			fail();

@@ -139,6 +139,16 @@ public class TestUSDateUtilities {
 
 	@Test
 	public void date() {
-		fail();
+		SimpleDateFormat df = new SimpleDateFormat( "yyyyMMdd HHmmssS" );
+
+		try {
+			Date expected = USDateUtilities.normalizeToMidnight( df.parse( "20000131 000000000" ) );
+			Date result = USDateUtilities.date( 2000, 1, 31 );
+			assertEquals( expected, result );
+		}
+		catch( ParseException e ) {
+			fail();
+		}
+
 	}
 }

@@ -3,13 +3,14 @@ package is.us.util;
 import java.util.*;
 
 /**
- * This class calculates all the holidays in a given year
- * and allow us to see if a certain date is a holiday.
- *
+ * Calculates all the holidays in a given year, according to current Icelandic laws.
+ * and allow us to check if a certain date is a holiday.
+ * 
  * Each holiday in this class indicates the start of the day.
- *
+ * 
+ * @issue INN-652
  * @author Hugi Þórðarson
- * @reviewedby Logi Helgu at Jun 24, 2009( see JIRA issue INN_652 )
+ * @reviewedby Logi Helgu, Jun 24, 2009 
  */
 
 public class USHolidays {
@@ -19,22 +20,35 @@ public class USHolidays {
 	 */
 	private int _year;
 
+	/**
+	 * Constructs a new holidays calculator.
+	 * 
+	 * @param newYear The year to calculate holidays for.
+	 */
 	public USHolidays( int newYear ) {
 		setYear( newYear );
 	}
 
+	/**
+	 * The year to calculate holidays for. 
+	 */
 	public int year() {
 		return _year;
 	}
 
+	/**
+	 * Set the year to calculate holidays for.
+	 * 
+	 * @param newYear The year to calculate holidays for.
+	 */
 	private void setYear( int newYear ) {
 		_year = newYear;
 	}
 
 	/**
-	 * Returns an array of all Icelandic holiday dates.<br />
-	 * Note that some of these holidays do not last the whole day.<br />
-	 * To get the days that last a whole day use fullHoldays.<br />
+	 * All Icelandic holiday dates, partial and complete.
+	 * Note that some of these holidays do not last the whole day.
+	 * To get the days that last a whole day use fullHoldays.
 	 * To get the days that last part of the day use partialHolidays.
 	 */
 	public List<Date> allHolidays() {
@@ -60,7 +74,7 @@ public class USHolidays {
 	}
 
 	/**
-	* Returns an array of Icelandic holiday dates that last the whole day.
+	* Icelandic full-day holidays.
 	*/
 	public List<Date> fullHolidays() {
 		List<Date> a = new ArrayList<Date>();
@@ -83,7 +97,7 @@ public class USHolidays {
 	}
 
 	/**
-	* Returns an array of holidays that last only part of the day.
+	* Partial Icelandic holidays. (holiday after noon).
 	*/
 	public List<Date> partialHolidays() {
 		List<Date> a = new ArrayList<Date>();
@@ -98,7 +112,7 @@ public class USHolidays {
 	 * Returns true if the date is a holiday
 	 */
 	public boolean isHoliday( Date date ) {
-		USDateUtilities.normalizeToMidnight( date );
+		date = USDateUtilities.normalizeToMidnight( date );
 		List<Date> holidays = allHolidays();
 		return holidays.contains( date );
 	}
@@ -107,9 +121,7 @@ public class USHolidays {
 	 * New Year's Day (Icelandic: Nýársdagur)
 	 */
 	public Date newYearsDay() {
-		GregorianCalendar c = USDateUtilities.cal();
-		c.set( year(), GregorianCalendar.JANUARY, 1, 0, 0, 0 );
-		return c.getTime();
+		return USDateUtilities.date( year(), 1, 1 );
 	}
 
 	/**
@@ -148,14 +160,11 @@ public class USHolidays {
 		int k = c % 4;
 		int l = (32 + 2 * e + 2 * i - h - k) % 7;
 		int m = (a + 11 * h + 22 * l) / 451;
-		int month = ((h + l - 7 * m + 114) / 31) - 1;
+		int month = ((h + l - 7 * m + 114) / 31);
 		int p = (h + l - 7 * m + 114) % 31;
 		int day = p + 1;
 
-		GregorianCalendar cal = USDateUtilities.cal();
-		cal.set( year(), month, day, 0, 0, 0 );
-
-		return cal.getTime();
+		return USDateUtilities.date( year(), month, day );
 	}
 
 	/**
@@ -181,9 +190,7 @@ public class USHolidays {
 	 * Labour day (Icelandic: Verkalýðdagurinn (1. maí))
 	 */
 	public Date firstOfMay() {
-		GregorianCalendar calendar = USDateUtilities.cal();
-		calendar.set( year(), GregorianCalendar.MAY, 1 );
-		return calendar.getTime();
+		return USDateUtilities.date( year(), 5, 1 );
 	}
 
 	/**
@@ -207,9 +214,7 @@ public class USHolidays {
 	 * Icelandic national holiday.
 	 */
 	public Date seventeenthOfJune() {
-		GregorianCalendar calendar = USDateUtilities.cal();
-		calendar.set( year(), GregorianCalendar.JUNE, 17 );
-		return calendar.getTime();
+		return USDateUtilities.date( year(), 6, 17 );
 	}
 
 	/**
@@ -228,27 +233,21 @@ public class USHolidays {
 	 * Afternoon only.
 	 */
 	public Date christmasEve() {
-		GregorianCalendar calendar = USDateUtilities.cal();
-		calendar.set( year(), GregorianCalendar.DECEMBER, 24 );
-		return calendar.getTime();
+		return USDateUtilities.date( year(), 12, 24 );
 	}
 
 	/**
 	 * Christmas Day (Icelandic: Jóladagur).
 	 */
 	public Date christmasDay() {
-		GregorianCalendar calendar = USDateUtilities.cal();
-		calendar.set( year(), GregorianCalendar.DECEMBER, 25 );
-		return calendar.getTime();
+		return USDateUtilities.date( year(), 12, 25 );
 	}
 
 	/**
 	 * Boxing Day (Icelandic: Annar í jólum).
 	 */
 	public Date boxingDay() {
-		GregorianCalendar calendar = USDateUtilities.cal();
-		calendar.set( year(), GregorianCalendar.DECEMBER, 26 );
-		return calendar.getTime();
+		return USDateUtilities.date( year(), 12, 26 );
 	}
 
 	/**
@@ -256,9 +255,6 @@ public class USHolidays {
 	 * Afternoon only.
 	 */
 	public Date newYearsEve() {
-		GregorianCalendar calendar = USDateUtilities.cal();
-		calendar.set( year(), GregorianCalendar.DECEMBER, 31 );
-		return calendar.getTime();
+		return USDateUtilities.date( year(), 12, 31 );
 	}
-
 }
