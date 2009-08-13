@@ -5,15 +5,12 @@ import is.us.thirdparty.ImageInfo;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.Iterator;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
+import javax.imageio.stream.MemoryCacheImageOutputStream;
 
 import org.slf4j.*;
-
-import com.sun.image.codec.jpeg.*;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
-import com.sun.media.jai.codec.*;
-import com.sun.media.jai.codecimpl.PNGCodec;
 
 /**
  * Various utility methods for dealing with image data.
@@ -92,6 +89,14 @@ public class USImageUtilities {
 		return img;
 	}
 
+	/**
+	 * 
+	 * @param height
+	 * @param width
+	 * @param maxHeight
+	 * @param maxWidth
+	 * @return
+	 */
 	private static float calculateProportions( int height, int width, int maxHeight, int maxWidth ) {
 		float hprop = 1;
 		float wprop = 1;
@@ -100,12 +105,18 @@ public class USImageUtilities {
 			hprop = (float)maxHeight / (float)height;
 		}
 
-		if( width > maxWidth )
+		if( width > maxWidth ) {
 			wprop = (float)maxWidth / (float)width;
+		}
 
 		return Math.min( wprop, hprop );
 	}
 
+	/**
+	 * 
+	 * @param imageData
+	 * @return
+	 */
 	public static BufferedImage bufferedImageFromData( byte[] imageData ) {
 		try {
 			return ImageIO.read( new ByteArrayInputStream( imageData ) );
@@ -116,17 +127,31 @@ public class USImageUtilities {
 		}
 	}
 
+	/**
+	 * 
+	 * @param image
+	 * @param qualityPercent
+	 * @return
+	 */
 	public static byte[] jpegEncodeBufferedImage( BufferedImage image, float qualityPercent ) {
 
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 			try {
-				JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder( os );
-				JPEGEncodeParam p = encoder.getDefaultJPEGEncodeParam( image );
+				Iterator iter = ImageIO.getImageWritersByFormatName( "jpeg" );
 
-				p.setQuality( qualityPercent, false );
-				encoder.encode( image, p );
+				float quality = qualityPercent / 100f;
+				ImageWriter writer = (ImageWriter)iter.next();
+				ImageWriteParam iwp = writer.getDefaultWriteParam();
+				iwp.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
+				iwp.setCompressionQuality( quality );
+
+				MemoryCacheImageOutputStream output = new MemoryCacheImageOutputStream( os );
+				writer.setOutput( output );
+				IIOImage iioimage = new IIOImage( image, null, null );
+				writer.write( null, iioimage, iwp );
+				writer.dispose();
 			}
 			catch( Exception e ) {
 				logger.error( "Error while jpeg encoding buffered image", e );
@@ -151,11 +176,16 @@ public class USImageUtilities {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 			try {
-				PNGEncodeParam p = PNGEncodeParam.getDefaultEncodeParam( image );
-				int t = image.getTransparency();
-				boolean tp = p.isTransparencySet();
-				ImageEncoder c = PNGCodec.createImageEncoder( "PNG", os, p );
-				c.encode( image );
+				Iterator iter = ImageIO.getImageWritersByFormatName( "png" );
+
+				ImageWriter writer = (ImageWriter)iter.next();
+				ImageWriteParam iwp = writer.getDefaultWriteParam();
+
+				MemoryCacheImageOutputStream output = new MemoryCacheImageOutputStream( os );
+				writer.setOutput( output );
+				IIOImage iioimage = new IIOImage( image, null, null );
+				writer.write( null, iioimage, iwp );
+				writer.dispose();
 			}
 			catch( IOException e ) {
 				logger.error( "Error while png encoding buffered image", e );
@@ -172,25 +202,18 @@ public class USImageUtilities {
 		}
 	}
 
+	/**
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public static ImageInfo imageInfo( byte[] data ) {
+		ImageInfo ii = new ImageInfo();
+		ii.setInput( new ByteArrayInputStream( data ) );
 
-		try {
-			ImageInfo ii = new ImageInfo();
-			ii.setInput( new ByteArrayInputStream( data ) );
+		if( !ii.check() )
+			return null;
 
-			if( !ii.check() )
-				return null;
-
-			// ii.getFormatName();
-			// ii.getMimeType();
-			// ii.getWidth();
-			// ii.getHeight();
-			// ii.getBitsPerPixel();
-
-			return ii;
-		}
-		catch( Exception e ) {}
-
-		return null;
+		return ii;
 	}
 }
