@@ -32,20 +32,20 @@ public class TestUSImageUtilities {
 	}
 
 	@Test
-	public void testEncodeImageToJPEGDataWithQuality() {
+	public void encode() {
 		String quality10Path = USTestUtilities.documentPath( this.getClass(), TEST_IMAGE_QUALITY_10 );
 		String quality50Path = USTestUtilities.documentPath( this.getClass(), TEST_IMAGE_QUALITY_50 );
 
 		try {
 			// test 10% quality
 			BufferedImage bi = ImageIO.read( new File( originalPath ) );
-			byte[] bytes = USImageUtilities.jpegEncodeBufferedImage( bi, 0.1f );
+			byte[] bytes = USImageUtilities.encode( bi, 10, CodecType.JPEG );
 			InputStream inStream1 = new ByteArrayInputStream( bytes );
 			assertEquals( USTestUtilities.streamDigest( quality10Path ), USTestUtilities.streamDigest( inStream1 ) );
 
 			// test 50% quality
 			BufferedImage bi2 = ImageIO.read( new File( originalPath ) );
-			byte[] bytes50 = USImageUtilities.jpegEncodeBufferedImage( bi2, 0.5f );
+			byte[] bytes50 = USImageUtilities.encode( bi2, 50, CodecType.JPEG );
 			InputStream inStream50 = new ByteArrayInputStream( bytes50 );
 			assertEquals( USTestUtilities.streamDigest( quality50Path ), USTestUtilities.streamDigest( inStream50 ) );
 		}
@@ -58,8 +58,8 @@ public class TestUSImageUtilities {
 	public void testScale() {
 		String testPath = USTestUtilities.documentPath( this.getClass(), TEST_IMAGE_SCALE_150X150 );
 		try {
-			BufferedImage bi = ImageIO.read( new File( originalPath ) );
-			byte[] bytes = USImageUtilities.scale( bi, 150, 150, 100, CodecType.JPEG );
+			byte[] input = USDataUtilities.readBytesFromFile( new File( originalPath ) );
+			byte[] bytes = USImageUtilities.scale( input, 150, 150, 100, CodecType.JPEG );
 			InputStream inStream = new ByteArrayInputStream( bytes );
 			assertEquals( USTestUtilities.streamDigest( testPath ), USTestUtilities.streamDigest( inStream ) );
 		}
@@ -72,8 +72,8 @@ public class TestUSImageUtilities {
 	public void thumbnaleScale() {
 		String testPath = USTestUtilities.documentPath( this.getClass(), TEST_IMAGE_THUMBNAIL_100X100 );
 		try {
-			BufferedImage bi = ImageIO.read( new File( testPath ) );
-			byte[] bytes = USImageUtilities.createThumbnail( bi, 50, 50, 100, CodecType.PNG );
+			byte[] input = USDataUtilities.readBytesFromFile( new File( testPath ) );
+			byte[] bytes = USImageUtilities.createThumbnail( input, 50, 50, 100, CodecType.PNG );
 			InputStream inStream = new ByteArrayInputStream( bytes );
 			assertEquals( USTestUtilities.streamDigest( testPath ), USTestUtilities.streamDigest( inStream ) );
 		}

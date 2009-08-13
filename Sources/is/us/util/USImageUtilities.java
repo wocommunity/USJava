@@ -20,82 +20,105 @@ import org.slf4j.*;
 
 public class USImageUtilities {
 
+	/**
+	 * Logger for the class
+	 */
 	private static final Logger logger = LoggerFactory.getLogger( USImageUtilities.class );
 
+	/**
+	 * Codecs supported by 
+	 */
 	public static enum CodecType {
 		JPEG, PNG
-	};
+	}
 
 	/**
 	 * No instances created, ever.
 	 */
 	private USImageUtilities() {}
 
+	/**
+	 * Scales the image in imageData to the size given in width and height.
+	 * 
+	 * @param imageData The image data to scale.
+	 * @param width The new width.
+	 * @param height The new height.
+	 * @param qualityPercent quality percentage, if the given codec is JPEG.
+	 * @param codecType The Codec to use.
+	 */
 	public static byte[] scale( byte[] imageData, int width, int height, int qualityPercent, CodecType codecType ) {
-		return scale( bufferedImageFromData( imageData ), width, height, qualityPercent, codecType );
+		BufferedImage inImage = bufferedImageFromData( imageData );
+		BufferedImage outImage = scale( inImage, width, height );
+		return encode( outImage, qualityPercent, codecType );
 	}
 
 	/**
-	* Takes byte array containing an image and scales it to the given size
-	* 
+	 * Scales the given Image to the specified size.
+	 * 
+	 * @param image The image to scale.
 	 * @param width The new width
 	 * @param height The new height
-	 * @param qualityPercent The JPEG quality to write out (1-100)
-	 * @param codecType
-	 * @param aPicture The picture to scale
 	 */
+	private static BufferedImage scale( BufferedImage image, int width, int height ) {
 
-	public static byte[] scale( Image inImage, int width, int height, int qualityPercent, CodecType codecType ) {
-		Image scaledImage = inImage.getScaledInstance( width, height, BufferedImage.SCALE_SMOOTH );
+		if( image == null ) {
+			return null;
+		}
+
+		Image scaledImage = image.getScaledInstance( width, height, BufferedImage.SCALE_SMOOTH );
 		BufferedImage outImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
 		Graphics2D g2 = outImage.createGraphics();
 		g2.drawImage( scaledImage, 0, 0, null );
-
-		byte[] img = null;
-		if( codecType == CodecType.JPEG )
-			img = jpegEncodeBufferedImage( outImage, qualityPercent );
-		else
-			img = pngEncodeBufferedImage( outImage );
-
-		return img;
-	}
-
-	public static byte[] createThumbnail( byte[] bytes, int maxWidth, int maxHeight, int qualityPercent, CodecType codecType ) {
-		BufferedImage bi = bufferedImageFromData( bytes );
-		return createThumbnail( bi, maxWidth, maxHeight, qualityPercent, codecType );
-	}
-
-	public static byte[] createThumbnail( BufferedImage b, int maxWidth, int maxHeight, int qualityPercent, CodecType codecType ) {
-		byte[] img = null;
-		if( b == null )
-			return null;
-
-		int height = b.getHeight();
-		int width = b.getWidth();
-
-		if( height > maxHeight || width > maxWidth ) {
-			float proportions = calculateProportions( height, width, maxHeight, maxWidth );
-			float newHeight = height * proportions;
-			float newWidth = width * proportions;
-			img = scale( b, (int)newWidth, (int)newHeight, qualityPercent, codecType );
-		}
-		else {
-			if( codecType == CodecType.JPEG )
-				img = jpegEncodeBufferedImage( b, qualityPercent );
-			else if( codecType == CodecType.PNG )
-				img = pngEncodeBufferedImage( b );
-
-		}
-		return img;
+		return outImage;
 	}
 
 	/**
+	 * Resizes the given image, if it  does not fit within the box specified by maxWidth and maxHeight.
 	 * 
-	 * @param height
-	 * @param width
-	 * @param maxHeight
-	 * @param maxWidth
-	 * @return
+	 * @param imageData The image to scale.
+	 * @param maxWidth The maximum width of the resulting image.
+	 * @param maxHeight The maximum height of the resulting image.
+	 * @param qualityPercent Quality percentage. Ignored if the codec is not JPEG.
+	 * @param codecType The codec to use.
+	 */
+	public static byte[] createThumbnail( byte[] imageData, int maxWidth, int maxHeight, int qualityPercent, CodecType codecType ) {
+		BufferedImage inImage = bufferedImageFromData( imageData );
+		BufferedImage outImage = createThumbnail( inImage, maxWidth, maxHeight );
+		return encode( outImage, qualityPercent, codecType );
+	}
+
+	/**
+	 * Resizes the given image, if it  does not fit within the box specified by maxWidth and maxHeight.
+	 * 
+	 * @param image The image to scale.
+	 * @param maxWidth The maximum width of the resulting image.
+	 * @param maxHeight The maximum height of the resulting image.
+	 */
+	private static BufferedImage createThumbnail( BufferedImage image, int maxWidth, int maxHeight ) {
+
+		if( image == null )
+			return null;
+
+		int height = image.getHeight();
+		int width = image.getWidth();
+
+		if( height <= maxHeight && width <= maxWidth )
+			return image;
+
+		float proportions = calculateProportions( height, width, maxHeight, maxWidth );
+		float newHeight = height * proportions;
+		float newWidth = width * proportions;
+
+		return scale( image, (int)newWidth, (int)newHeight );
+	}
+
+	/**
+	 * Calculates the proportional size of a box, given maximum dimensions.
+	 * 
+	 * @param height Original height.
+	 * @param width Original width.
+	 * @param maxHeight Maximum height.
+	 * @param maxWidth Maximum width.
 	 */
 	private static float calculateProportions( int height, int width, int maxHeight, int maxWidth ) {
 		float hprop = 1;
@@ -113,9 +136,9 @@ public class USImageUtilities {
 	}
 
 	/**
+	 * Attempts to construct a buffered image from reading the bytes in a byte array.
 	 * 
-	 * @param imageData
-	 * @return
+	 * @param imageData the data to read.
 	 */
 	public static BufferedImage bufferedImageFromData( byte[] imageData ) {
 		try {
@@ -128,21 +151,37 @@ public class USImageUtilities {
 	}
 
 	/**
+	 * Encodes the given image.
 	 * 
-	 * @param image
-	 * @param qualityPercent
-	 * @return
+	 * @param image The image to encode.
+	 * @param qualityPercent Quality percentage. Ignored if the codec is not JPEG.
+	 * @param codecType The codec to use.
 	 */
-	public static byte[] jpegEncodeBufferedImage( BufferedImage image, float qualityPercent ) {
+	public static byte[] encode( BufferedImage image, int qualityPercent, CodecType codecType ) {
+
+		if( codecType == CodecType.JPEG ) {
+			return encodeJPEG( image, qualityPercent );
+		}
+
+		return encodePNG( image );
+	}
+
+	/**
+	 * Encodes the given image as JPEG, with the given quality.
+	 *  
+	 * @param image the image to encode.
+	 * @param qualityPercent The quality of the resulting image.
+	 */
+	private static byte[] encodeJPEG( BufferedImage image, float qualityPercent ) {
 
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 			try {
-				Iterator iter = ImageIO.getImageWritersByFormatName( "jpeg" );
+				Iterator<ImageWriter> iter = ImageIO.getImageWritersByFormatName( "jpeg" );
 
 				float quality = qualityPercent / 100f;
-				ImageWriter writer = (ImageWriter)iter.next();
+				ImageWriter writer = iter.next();
 				ImageWriteParam iwp = writer.getDefaultWriteParam();
 				iwp.setCompressionMode( ImageWriteParam.MODE_EXPLICIT );
 				iwp.setCompressionQuality( quality );
@@ -169,16 +208,18 @@ public class USImageUtilities {
 	}
 
 	/**
-	 * @author Atli Páll Hafsteinsson
+	 * Encodes the given image as PNG.
+	 *  
+	 * @param image the image to encode.
 	 */
-	public static byte[] pngEncodeBufferedImage( BufferedImage image ) {
+	private static byte[] encodePNG( BufferedImage image ) {
 		try {
 			ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 			try {
-				Iterator iter = ImageIO.getImageWritersByFormatName( "png" );
+				Iterator<ImageWriter> iter = ImageIO.getImageWritersByFormatName( "png" );
 
-				ImageWriter writer = (ImageWriter)iter.next();
+				ImageWriter writer = iter.next();
 				ImageWriteParam iwp = writer.getDefaultWriteParam();
 
 				MemoryCacheImageOutputStream output = new MemoryCacheImageOutputStream( os );
@@ -203,13 +244,14 @@ public class USImageUtilities {
 	}
 
 	/**
+	 * Returns an instance of ImageInfo, that provides various metadata on the image.
+	 * See ImageInfo.java for information on information provided, and a list of formats it handles.
 	 * 
-	 * @param data
-	 * @return
+	 * @param imageData The image data.
 	 */
-	public static ImageInfo imageInfo( byte[] data ) {
+	public static ImageInfo imageInfo( byte[] imageData ) {
 		ImageInfo ii = new ImageInfo();
-		ii.setInput( new ByteArrayInputStream( data ) );
+		ii.setInput( new ByteArrayInputStream( imageData ) );
 
 		if( !ii.check() )
 			return null;
