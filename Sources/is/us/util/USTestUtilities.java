@@ -85,4 +85,21 @@ public class USTestUtilities {
 		BigInteger bigInt = new BigInteger( 1, md5sum );
 		return bigInt.toString( 16 );
 	}
+
+	/**
+	 * Saves a stream to a physical file 
+	 * @param inStream stream to save
+	 * @param fileName name of file to save to
+	 * @throws IOException if an I/O error occurs
+	 */
+	public void saveFile( InputStream inStream, String fileName ) throws IOException {
+		File file = new File( fileName );
+		OutputStream out = new FileOutputStream( file );
+		byte buf[] = new byte[8192];
+		int len;
+		while( (len = inStream.read( buf )) > 0 ) {
+			out.write( buf, 0, len );
+		}
+		out.close();
+	}
 }
