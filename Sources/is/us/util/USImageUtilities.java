@@ -96,14 +96,16 @@ public class USImageUtilities {
 	 */
 	private static BufferedImage createThumbnail( BufferedImage image, int maxWidth, int maxHeight ) {
 
-		if( image == null )
+		if( image == null ) {
 			return null;
+		}
 
 		int height = image.getHeight();
 		int width = image.getWidth();
 
-		if( height <= maxHeight && width <= maxWidth )
+		if( height <= maxHeight && width <= maxWidth ) {
 			return image;
+		}
 
 		float proportions = calculateProportions( height, width, maxHeight, maxWidth );
 		float newHeight = height * proportions;
@@ -244,8 +246,8 @@ public class USImageUtilities {
 	}
 
 	/**
-	 * Returns an instance of ImageInfo, that provides various metadata on the image.
-	 * See ImageInfo.java for information on information provided, and a list of formats it handles.
+	 * Returns an instance of the 3rd party class "Image"Info, that reads and provides various metadata on the image.
+	 * See ImageInfo.java for information on provided data and a list of formats it handles.
 	 * 
 	 * @param imageData The image data.
 	 */
@@ -253,8 +255,9 @@ public class USImageUtilities {
 		ImageInfo ii = new ImageInfo();
 		ii.setInput( new ByteArrayInputStream( imageData ) );
 
-		if( !ii.check() )
+		if( !ii.check() ) {
 			return null;
+		}
 
 		return ii;
 	}
