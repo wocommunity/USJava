@@ -5,5 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/junit-4.7.jar"/>
 	<classpathentry exported="true" kind="lib" path="Libraries/slf4j-api-1.5.8.jar"/>
+	<classpathentry kind="lib" path="Libraries/logback-classic-0.9.17.jar"/>
+	<classpathentry kind="lib" path="Libraries/logback-core-0.9.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
