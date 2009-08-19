@@ -49,7 +49,7 @@ public class USImageUtilities {
 	 */
 	public static byte[] scale( byte[] imageData, int width, int height, int qualityPercent, CodecType codecType ) {
 		BufferedImage inImage = bufferedImageFromData( imageData );
-		BufferedImage outImage = scale( inImage, width, height );// TODO: reuse inImage BufferedImage
+		BufferedImage outImage = scale( inImage, width, height ); // TODO: reuse inImage BufferedImage
 		return encode( outImage, qualityPercent, codecType );
 	}
 
