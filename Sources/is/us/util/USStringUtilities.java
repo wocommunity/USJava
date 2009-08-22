@@ -748,10 +748,25 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * working again, b.s.
+	 * Creates active, working hyperlinks.
 	 */
-	public static String activateHyperlinksInString( String s ) {
-		return s.replaceAll( "(((ht|f)(tp)(s?)://)([a-zA-Z0-9]*(.))?[a-zA-Z0-9]*((\\.)[a-zA-Z]{2,5})(/[\\w|\\d|\\.|%|&|;|=|\\?]*)*)(\\S)", "<a href=\"$0\" target=\"_blank\">$0</a>" );
+	public static String activateHyperlinksInString( String string ) {
+
+		if( string == null )
+			return null;
+
+		return string.replaceAll( "(((ht|f)(tp)(s?)://)([a-zA-Z0-9]*(.))?[a-zA-Z0-9]*((\\.)[a-zA-Z]{2,5})(/[\\w|\\d|\\.|%|&|;|=|\\?]*)*)(\\S)", "<a href=\"$0\">$0</a>" );
+	}
+
+	/**
+	 * Creates a link to each user in a tweet.
+	 */
+	public static String activateTwitterUsersInString( String string ) {
+
+		if( string == null )
+			return null;
+
+		return string.replaceAll( "@(\\w+)", "<a href=\"http://www.twitter.com/$1\">@$1</a>" );
 	}
 
 	/**
