@@ -795,15 +795,19 @@ public class USStringUtilities extends Object {
 		if( !stringHasValue( originalString ) )
 			return null;
 
-		if( replacements == null )
+		if( replacements == null ) {
 			return originalString;
+		}
 
 		for( String key : replacements.keySet() ) {
 			if( stringHasValue( key ) ) {
 				String object = replacements.get( key );
-				originalString = replaceStringByStringInString( key, object, originalString );
+				originalString = replace( originalString, key, object );
 			}
 		}
+
+		logger.debug( "originalString: {}", originalString );
+		logger.debug( "replacements: {}", replacements );
 
 		return originalString;
 	}
