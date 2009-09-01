@@ -38,9 +38,8 @@ public class USNumberUtilities {
 	/**
 	 * See http://en.wikipedia.org/wiki/Horsepower#Metric_horsepower
 	 * converts kilowatts to metric horsepowers
-	 * @param kw 
+	 * @param kw kilowatts to be converted
 	 * @reviewedby Atli Páll Hafsteinsson
-	 * FIXME: vantar test
 	 */
 	public static float kilowattsToMetricHorsepower( float kw ) {
 		if( kw == 0 ) {
