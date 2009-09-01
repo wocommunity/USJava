@@ -9,6 +9,8 @@ package is.us.util;
 
 public class USNumberUtilities {
 
+	public static final float METRIC_HP_IN_KW = 0.73549875f;// 1 metric horsepower = 735.49875 watts (0.73549875 Kw)
+
 	/**
 	 * Checks if a number is between two the two given numbers, inclusive.
 	 * 
@@ -31,5 +33,17 @@ public class USNumberUtilities {
 		}
 
 		return false;
+	}
+
+	/**
+	 * http://en.wikipedia.org/wiki/Horsepower#Metric_horsepower
+	 * @param kw
+	 * @return
+	 */
+	public static float kilowatsToMetricHorsePower( float kw ) {
+		if( kw == 0 ) {
+			return 0f;
+		}
+		return kw / METRIC_HP_IN_KW;
 	}
 }
