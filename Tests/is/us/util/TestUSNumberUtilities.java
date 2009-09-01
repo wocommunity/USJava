@@ -1,6 +1,7 @@
 package is.us.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -21,4 +22,16 @@ public class TestUSNumberUtilities {
 		assertFalse( USNumberUtilities.isBetween( 2, null, 3 ) );
 		assertFalse( USNumberUtilities.isBetween( 2, 1, null ) );
 	}
+
+	@Test
+	public void kilowattsToMetricHorsepower() {
+		assertTrue( USStringUtilities.formatDouble( USNumberUtilities.kilowattsToMetricHorsepower( -200 ), 4, false ).equals( "-271,9243" ) );
+		assertTrue( USStringUtilities.formatDouble( USNumberUtilities.kilowattsToMetricHorsepower( -1 ), 4, false ).equals( "-1,3596" ) );
+		assertTrue( USStringUtilities.formatDouble( USNumberUtilities.kilowattsToMetricHorsepower( 0 ), 4, false ).equals( "0" ) );
+		assertTrue( USStringUtilities.formatDouble( USNumberUtilities.kilowattsToMetricHorsepower( 1 ), 4, false ).equals( "1,3596" ) );
+		assertTrue( USStringUtilities.formatDouble( USNumberUtilities.kilowattsToMetricHorsepower( 10 ), 4, false ).equals( "13,5962" ) );
+		assertTrue( USStringUtilities.formatDouble( USNumberUtilities.kilowattsToMetricHorsepower( 20.5f ), 4, false ).equals( "27,8722" ) );
+		assertTrue( USStringUtilities.formatDouble( USNumberUtilities.kilowattsToMetricHorsepower( -20.5f ), 4, false ).equals( "-27,8722" ) );
+	}
+
 }
