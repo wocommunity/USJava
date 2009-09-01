@@ -36,11 +36,11 @@ public class USNumberUtilities {
 	}
 
 	/**
-	 * http://en.wikipedia.org/wiki/Horsepower#Metric_horsepower
-	 * @param kw
-	 * @return
+	 * See http://en.wikipedia.org/wiki/Horsepower#Metric_horsepower
+	 * converts kilowatts to metric horsepowers
+	 * @param kw 
 	 */
-	public static float kilowatsToMetricHorsePower( float kw ) {
+	public static float kilowattsToMetricHorsepower( float kw ) {
 		if( kw == 0 ) {
 			return 0f;
 		}
