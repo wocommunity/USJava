@@ -1,9 +1,6 @@
 package is.us.util;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.*;
 import java.util.HashMap;
@@ -288,12 +285,12 @@ public class TestUSStringUtilities {
 
 	@Test
 	public void htmlify() {
-		assertEquals( USStringUtilities.htmlify( " a\nhttp://www.us.is/vedur " ), "a<br />\n<a href=\"http://www.us.is/vedur\" target=\"_blank\">http://www.us.is/vedur</a>" );
+		assertEquals( USStringUtilities.htmlify( " a\nhttp://www.us.is/vedur " ), "a<br />\n<a href=\"http://www.us.is/vedur\">http://www.us.is/vedur</a>" );
 	}
 
 	@Test
 	public void activateHyperlinksInString() {
-		assertEquals( USStringUtilities.activateHyperlinksInString( "a http://www.us.is/vedur" ), "a <a href=\"http://www.us.is/vedur\" target=\"_blank\">http://www.us.is/vedur</a>" );
+		assertEquals( USStringUtilities.activateHyperlinksInString( "a http://www.us.is/vedur" ), "a <a href=\"http://www.us.is/vedur\">http://www.us.is/vedur</a>" );
 	}
 
 	@Test
