@@ -806,9 +806,6 @@ public class USStringUtilities extends Object {
 			}
 		}
 
-		logger.debug( "originalString: {}", originalString );
-		logger.debug( "replacements: {}", replacements );
-
 		return originalString;
 	}
 
