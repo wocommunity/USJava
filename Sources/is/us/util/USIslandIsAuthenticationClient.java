@@ -11,12 +11,12 @@ import org.slf4j.*;
 
 import sun.misc.BASE64Encoder;
 
+//TODO: needs review 
 /**
  * Handle communications with the island.is authentication service.
  * 
  * @author Bjarni Sævarsson <bjarnis@us.is>
  * @author Atli Páll Hafsteinsson <atlip@us.is>
- *
  */
 public class USIslandIsAuthenticationClient {
 
