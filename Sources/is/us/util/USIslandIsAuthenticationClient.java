@@ -14,6 +14,7 @@ import sun.misc.BASE64Encoder;
 /**
  * Handle communications with the island.is authentication service.
  * 
+ * @author Bjarni Sævarsson <bjarnis@us.is>
  * @author Atli Páll Hafsteinsson <atlip@us.is>
  *
  */
@@ -45,10 +46,10 @@ public class USIslandIsAuthenticationClient {
 	private USIslandIsAuthenticationClient() {}
 
 	/**
-	 * @param token
-	 * @param userIp
-	 * @param username
-	 * @param password
+	 * @param token the login token received from island.is
+	 * @param userIp the users IP address
+	 * @param username the island.is authentication service username
+	 * @param password the island.is authentication service password
 	 */
 	public USIslandIsAuthenticationClient( String token, String userIp, String username, String password ) {
 		_token = token;
@@ -131,17 +132,7 @@ public class USIslandIsAuthenticationClient {
 			Element saml = soapResponseCertSaml.getFirstChildElement( "saml" );
 
 			// if saml is htmlencoded we need to re-parse it
-			Element assertion = parseHtmlEncodedSAML( parser, saml );
-
-			if( assertion == null ) {
-				assertion = firstChild( saml, "Assertion", "urn:oasis:names:tc:SAML:1.0:assertion" );
-			}
-
-			if( assertion == null ) {
-				String m = "island.is SAML message is not valid, Assertion tag not found!";
-				logger.error( m );
-				throw new USIslandIsAuthenticationException( m );
-			}
+			Element assertion = parseAssertation( parser, saml );
 
 			insertAttributesInMap( info, assertion );
 		}
@@ -196,8 +187,9 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * @param info
-	 * @param assertion
+	 * Gets the attributes from the assertion and puts them in a map
+	 * @param info the map to put the attributes in
+	 * @param assertion the assertion
 	 */
 	private void insertAttributesInMap( Map<String, String> info, Element assertion ) {
 		Element AttributeStatement = firstChild( assertion, "AttributeStatement", "urn:oasis:names:tc:SAML:1.0:assertion" );
@@ -216,13 +208,13 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * @param parser
-	 * @param saml
-	 * @param assertion
-	 * @return
-	 * @throws USIslandIsAuthenticationException
+	 * Parses the assertion element from the SAML message
+	 * @param parser the xml parser to use
+	 * @param saml the SAML message
+	 * @return the assertion element from the SAML message
+	 * @throws USIslandIsAuthenticationException if there is an error
 	 */
-	private Element parseHtmlEncodedSAML( Builder parser, Element saml ) {
+	private Element parseAssertation( Builder parser, Element saml ) {
 		Document docXML;
 		Element assertion = null;
 		if( saml.getChildElements().size() == 0 ) {
@@ -265,6 +257,17 @@ public class USIslandIsAuthenticationClient {
 				throw new USIslandIsAuthenticationException( msg, e );
 			}
 		}
+
+		if( assertion == null ) {
+			assertion = firstChild( saml, "Assertion", "urn:oasis:names:tc:SAML:1.0:assertion" );
+		}
+
+		if( assertion == null ) {
+			String m = "island.is SAML message is not valid, Assertion tag not found!";
+			logger.error( m );
+			throw new USIslandIsAuthenticationException( m );
+		}
+
 		return assertion;
 	}
 
