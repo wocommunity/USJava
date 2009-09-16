@@ -13,6 +13,8 @@ import sun.misc.BASE64Encoder;
 
 /**
  * Handle communications with the island.is authentication service.
+ * See http://en.wikipedia.org/wiki/Security_Assertion_Markup_Language 
+ * for information about SAML
  * 
  * @author Bjarni Sævarsson <bjarnis@us.is>
  * @author Atli Páll Hafsteinsson <atlip@us.is>
@@ -21,6 +23,13 @@ import sun.misc.BASE64Encoder;
 public class USIslandIsAuthenticationClient {
 
 	private static final Logger logger = LoggerFactory.getLogger( USIslandIsAuthenticationClient.class );
+
+	private static final String CERT_ROOT_NAMESPACE = "http://www.kogun.is/eGov/eGovSAMLGenerator.webServices";
+	private static final String IP_KEY = "IP";
+	private static final String TOKEN_KEY = "TOKEN";
+	private static final String SSN_KEY = "SSN";
+	private static final String SYSID_KEY = "SYSID";
+	private static final String STATUS_CODE_KEY = "status.code";
 
 	private static final String CRLF = "\r\n";
 	private static final String USER_AGENT_NAME = "is.us.island.authenticate";
@@ -58,45 +67,49 @@ public class USIslandIsAuthenticationClient {
 		_password = password;
 	}
 
-	// TODO Shouldn't all the keys be constants
-	// TODO (samlInfo.containsKey( "status.code" ) && !samlInfo.get( "status.code" ).equals( "0" )) is being called also in persidno, this should be a method
 	// TODO What is a "saml" response?
+	// http://en.wikipedia.org/wiki/Security_Assertion_Markup_Language
 	/**
-	 * @return The sysid (identifier of the system that handled the login) from the saml response.
+	 * @return The sysid (identifier of the system that handled the login) from the SAML response.
 	 */
 	public String sysid() {
 		Map<String, String> samlInfo = samlInfo();
 
-		if( (samlInfo.containsKey( "status.code" ) && !samlInfo.get( "status.code" ).equals( "0" )) || !samlInfo.containsKey( "SYSID" ) ) {
+		if( samlHasErrorStatus( samlInfo ) || !samlInfo.containsKey( SYSID_KEY ) ) {
 			return null;
 		}
 
-		return samlInfo.get( "SYSID" );
+		return samlInfo.get( SYSID_KEY );
 	}
 
-	// TODO There is not request parameter here as stated in the JavaDoc
 	/**
-	 * @param request the request to fetch the persidno from.
+	 * @param samlInfo
+	 * @return
+	 */
+	private boolean samlHasErrorStatus( Map<String, String> samlInfo ) {
+		return (samlInfo.containsKey( STATUS_CODE_KEY ) && !samlInfo.get( STATUS_CODE_KEY ).equals( "0" ));
+	}
+
+	/**
 	 * @return The user persidno from the saml response
 	 * @throws USIslandIsAuthenticationException if there is an error getting the persidno
 	 */
 	public String persidno() {
 		Map<String, String> samlInfo = samlInfo();
 
-		if( (samlInfo == null) || !samlInfo.containsKey( "SSN" ) || (samlInfo.containsKey( "status.code" ) && !samlInfo.get( "status.code" ).equals( "0" )) ) {
+		if( (samlInfo == null) || !samlInfo.containsKey( SSN_KEY ) || samlHasErrorStatus( samlInfo ) ) {
 			String errorMessage;
 
 			if( samlInfo == null ) {
 				errorMessage = "samlInfo == null";
 			}
 			else {
-				errorMessage = "SSN = " + samlInfo.get( "SSN" ) + " status.code = " + samlInfo.get( "status.code" );
+				errorMessage = "SSN = " + samlInfo.get( SSN_KEY ) + " status.code = " + samlInfo.get( STATUS_CODE_KEY );
 			}
-			logger.error( errorMessage );
-			throw new USIslandIsAuthenticationException( errorMessage );
+			handleError( errorMessage );
 		}
 
-		return samlInfo.get( "SSN" );
+		return samlInfo.get( SSN_KEY );
 	}
 
 	/**
@@ -111,8 +124,8 @@ public class USIslandIsAuthenticationClient {
 		}
 
 		Map<String, String> info = new HashMap<String, String>();
-		info.put( "TOKEN", _token );
-		info.put( "IP", _userIp );
+		info.put( TOKEN_KEY, _token );
+		info.put( IP_KEY, _userIp );
 
 		Builder parser = new Builder();
 		Document docXML = null;
@@ -127,8 +140,7 @@ public class USIslandIsAuthenticationClient {
 			checkSoapForFaults( info, body );
 
 			// fetch the soap function response from the soap body
-			// TODO constants?
-			Element soapResponseCertSaml = firstChild( body, "generateSAMLFromTokenResponse", "http://www.kogun.is/eGov/eGovSAMLGenerator.webServices" );
+			Element soapResponseCertSaml = firstChild( body, "generateSAMLFromTokenResponse", CERT_ROOT_NAMESPACE );
 
 			// Check for SAML error
 			checkSamlForErrors( info, soapResponseCertSaml );
@@ -141,32 +153,27 @@ public class USIslandIsAuthenticationClient {
 
 			insertAttributesInMap( info, assertion );
 		}
-		// TODO This is being done all over, you could write a method that takes in the msg and e, logs it and throws USIslandIsAuthenticationException
 		catch( ValidityException e ) {
 			String msg = "Error validating island.is XML";
-			logger.error( msg );
-			throw new USIslandIsAuthenticationException( msg, e );
+			handleError( e, msg );
 		}
 		catch( ParsingException e ) {
 			String msg = "Error parsing island.is XML";
-			logger.error( msg );
-			throw new USIslandIsAuthenticationException( msg, e );
+			handleError( e, msg );
 		}
 		catch( IOException e ) {
 			String msg = "Error reading island.is XML";
-			logger.error( msg );
-			throw new USIslandIsAuthenticationException( msg, e );
+			handleError( e, msg );
 		}
 
 		_samlInfo = info;
 		return _samlInfo;
 	}
 
-	// TODO soapResponseCertSaml is what?
 	/**
 	 * Checks for error status codes in the SAML and sets them in the information dictionary
 	 * @param info the dictionary to set the error messages in
-	 * @param soapResponseCertSaml
+	 * @param soapResponseCertSaml the SAML to get status codes from
 	 * @throws USIslandIsAuthenticationException if the are errors
 	 */
 	private void checkSamlForErrors( Map<String, String> info, Element soapResponseCertSaml ) {
@@ -176,12 +183,10 @@ public class USIslandIsAuthenticationClient {
 		String code = status.getChildElements( "code" ).get( 0 ).getValue();
 		String msg = status.getChildElements( "message" ).get( 0 ).getValue();
 		info.put( "status.type", type );
-		info.put( "status.code", code );
+		info.put( STATUS_CODE_KEY, code );
 		info.put( "status.message", msg );
 		if( !code.equals( "0" ) ) {
-			String m = "SAML message is not valid!";
-			logger.error( m );
-			throw new USIslandIsAuthenticationException( m );
+			handleError( "SAML message is not valid!" );
 		}
 	}
 
@@ -225,6 +230,7 @@ public class USIslandIsAuthenticationClient {
 		Document docXML;
 		Element assertion = null;
 		// TODO I don't get this check
+		// If there are no child elements the stuff is html encoded, and needs to have a separate parse
 		if( saml.getChildElements().size() == 0 ) {
 			try {
 				docXML = parser.build( saml.getValue(), "" );
@@ -243,26 +249,18 @@ public class USIslandIsAuthenticationClient {
 						}
 					}
 					if( !assertFound ) {
-						String m = "island.is SAML message is not valid!";
-						logger.error( m );
-						throw new USIslandIsAuthenticationException( m );
+						handleError( "island.is SAML message is not valid!" );
 					}
 				}
 			}
 			catch( ValidityException e ) {
-				String msg = "Error validating island.is XML";
-				logger.error( msg );
-				throw new USIslandIsAuthenticationException( msg, e );
+				handleError( e, "Error validating island.is XML" );
 			}
 			catch( ParsingException e ) {
-				String msg = "Error parsing island.is XML";
-				logger.error( msg );
-				throw new USIslandIsAuthenticationException( msg, e );
+				handleError( e, "Error parsing island.is XML" );
 			}
 			catch( IOException e ) {
-				String msg = "Error reading island.is XML";
-				logger.error( msg );
-				throw new USIslandIsAuthenticationException( msg, e );
+				handleError( e, "Error reading island.is XML" );
 			}
 		}
 
@@ -271,9 +269,7 @@ public class USIslandIsAuthenticationClient {
 		}
 
 		if( assertion == null ) {
-			String m = "island.is SAML message is not valid, Assertion tag not found!";
-			logger.error( m );
-			throw new USIslandIsAuthenticationException( m );
+			handleError( "island.is SAML message is not valid, Assertion tag not found!" );
 		}
 
 		return assertion;
@@ -298,9 +294,7 @@ public class USIslandIsAuthenticationClient {
 				logger.error( key + " = " + val );
 			}
 
-			String m = "SOAP message is not valid!";
-			logger.error( m );
-			throw new USIslandIsAuthenticationException( m );
+			handleError( "SOAP message is not valid!" );
 		}
 	}
 
@@ -346,14 +340,10 @@ public class USIslandIsAuthenticationClient {
 			}
 		}
 		catch( NoClassDefFoundError e ) {
-			String msg = "SSLSocket handshake error";
-			logger.error( msg, e );
-			throw new USIslandIsAuthenticationException( msg, e );
+			handleError( e, "SSLSocket handshake error" );
 		}
 		catch( IOException e ) {
-			String msg = "IOException when communicating with island.is";
-			logger.error( msg, e );
-			throw new USIslandIsAuthenticationException( msg, e );
+			handleError( e, "IOException when communicating with island.is" );
 		}
 		finally {
 			try {
@@ -367,8 +357,11 @@ public class USIslandIsAuthenticationClient {
 		return response.toString();
 	}
 
-	// TODO: Missing description for parameters 
 	/**
+	 * @param token the login token received from island.is
+	 * @param userIp the users IP address
+	 * @param username the island.is authentication service username
+	 * @param password the island.is authentication service password
 	 * @return The SOAP request headers
 	 */
 	private String soapMessageHeaders( String token, String userIp, String username, String password ) {
@@ -386,8 +379,9 @@ public class USIslandIsAuthenticationClient {
 		return headers.toString();
 	}
 
-	// TODO: Missing description for parameters 
 	/**
+	 * @param token the login token received from island.is
+	 * @param userIp the users IP address
 	 * @return The soap request body.
 	 */
 	private String soapMessageBody( String token, String userIp ) {
@@ -425,5 +419,26 @@ public class USIslandIsAuthenticationClient {
 		}
 
 		return childElement;
+	}
+
+	/**
+	 * Logs errors and throws and {@link USIslandIsAuthenticationException} exception
+	 * @param e the underlying error
+	 * @param msg the error message
+	 * @throws USIslandIsAuthenticationException
+	 */
+	private void handleError( Throwable e, String msg ) {
+		logger.error( msg );
+		throw new USIslandIsAuthenticationException( msg, e );
+	}
+
+	/**
+	 * Logs errors and throws and {@link USIslandIsAuthenticationException} exception
+	 * @param msg the error message
+	 * @throws USIslandIsAuthenticationException
+	 */
+	private void handleError( String msg ) {
+		logger.error( msg );
+		throw new USIslandIsAuthenticationException( msg );
 	}
 }
