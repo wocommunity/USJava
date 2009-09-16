@@ -12,9 +12,7 @@ import org.slf4j.*;
 import sun.misc.BASE64Encoder;
 
 /**
- * Handle communications with the island.is authentication service.
- * See http://en.wikipedia.org/wiki/Security_Assertion_Markup_Language 
- * for information about SAML
+ * Handle communications with the island.is authentication service. See http://en.wikipedia.org/wiki/Security_Assertion_Markup_Language for information about SAML
  * 
  * @author Bjarni Sævarsson <bjarnis@us.is>
  * @author Atli Páll Hafsteinsson <atlip@us.is>
@@ -67,8 +65,6 @@ public class USIslandIsAuthenticationClient {
 		_password = password;
 	}
 
-	// TODO What is a "saml" response?
-	// http://en.wikipedia.org/wiki/Security_Assertion_Markup_Language
 	/**
 	 * @return The sysid (identifier of the system that handled the login) from the SAML response.
 	 */
@@ -229,7 +225,7 @@ public class USIslandIsAuthenticationClient {
 	private Element parseAssertation( Builder parser, Element saml ) {
 		Document docXML;
 		Element assertion = null;
-		// TODO I don't get this check
+
 		// If there are no child elements the stuff is html encoded, and needs to have a separate parse
 		if( saml.getChildElements().size() == 0 ) {
 			try {
