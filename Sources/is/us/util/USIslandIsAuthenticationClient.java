@@ -11,12 +11,12 @@ import org.slf4j.*;
 
 import sun.misc.BASE64Encoder;
 
-//TODO: needs review 
 /**
  * Handle communications with the island.is authentication service.
  * 
  * @author Bjarni Sævarsson <bjarnis@us.is>
  * @author Atli Páll Hafsteinsson <atlip@us.is>
+ * @reviewedby Logi Helgu at Sep 16, 2009( see JIRA issue INN-728 )
  */
 public class USIslandIsAuthenticationClient {
 
@@ -58,6 +58,9 @@ public class USIslandIsAuthenticationClient {
 		_password = password;
 	}
 
+	// TODO Shouldn't all the keys be constants
+	// TODO (samlInfo.containsKey( "status.code" ) && !samlInfo.get( "status.code" ).equals( "0" )) is being called also in persidno, this should be a method
+	// TODO What is a "saml" response?
 	/**
 	 * @return The sysid (identifier of the system that handled the login) from the saml response.
 	 */
@@ -71,10 +74,11 @@ public class USIslandIsAuthenticationClient {
 		return samlInfo.get( "SYSID" );
 	}
 
+	// TODO There is not request parameter here as stated in the JavaDoc
 	/**
 	 * @param request the request to fetch the persidno from.
 	 * @return The user persidno from the saml response
-	 * @throws USIslandIsAuthenticationException if there is an error geting the persidno
+	 * @throws USIslandIsAuthenticationException if there is an error getting the persidno
 	 */
 	public String persidno() {
 		Map<String, String> samlInfo = samlInfo();
@@ -123,6 +127,7 @@ public class USIslandIsAuthenticationClient {
 			checkSoapForFaults( info, body );
 
 			// fetch the soap function response from the soap body
+			// TODO constants?
 			Element soapResponseCertSaml = firstChild( body, "generateSAMLFromTokenResponse", "http://www.kogun.is/eGov/eGovSAMLGenerator.webServices" );
 
 			// Check for SAML error
@@ -131,11 +136,12 @@ public class USIslandIsAuthenticationClient {
 			// fetch the saml message from the soap function response
 			Element saml = soapResponseCertSaml.getFirstChildElement( "saml" );
 
-			// if saml is htmlencoded we need to re-parse it
+			// if saml is html encoded we need to re-parse it
 			Element assertion = parseAssertation( parser, saml );
 
 			insertAttributesInMap( info, assertion );
 		}
+		// TODO This is being done all over, you could write a method that takes in the msg and e, logs it and throws USIslandIsAuthenticationException
 		catch( ValidityException e ) {
 			String msg = "Error validating island.is XML";
 			logger.error( msg );
@@ -156,6 +162,7 @@ public class USIslandIsAuthenticationClient {
 		return _samlInfo;
 	}
 
+	// TODO soapResponseCertSaml is what?
 	/**
 	 * Checks for error status codes in the SAML and sets them in the information dictionary
 	 * @param info the dictionary to set the error messages in
@@ -217,6 +224,7 @@ public class USIslandIsAuthenticationClient {
 	private Element parseAssertation( Builder parser, Element saml ) {
 		Document docXML;
 		Element assertion = null;
+		// TODO I don't get this check
 		if( saml.getChildElements().size() == 0 ) {
 			try {
 				docXML = parser.build( saml.getValue(), "" );
@@ -359,6 +367,7 @@ public class USIslandIsAuthenticationClient {
 		return response.toString();
 	}
 
+	// TODO: Missing description for parameters 
 	/**
 	 * @return The SOAP request headers
 	 */
@@ -377,6 +386,7 @@ public class USIslandIsAuthenticationClient {
 		return headers.toString();
 	}
 
+	// TODO: Missing description for parameters 
 	/**
 	 * @return The soap request body.
 	 */
@@ -401,8 +411,7 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * Returns the first child element, from parent, with given name.
-	 * Attempts to search in a new namespace if parent namespace returns null.
+	 * Returns the first child element, from parent, with given name. Attempts to search in a new namespace if parent namespace returns null.
 	 * 
 	 * @param parent Element to search in.
 	 * @param name Name of the child element to return.
