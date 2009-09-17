@@ -57,12 +57,18 @@ public class USIslandIsAuthenticationClient {
 	 * @param userIp the users IP address
 	 * @param username the island.is authentication service username
 	 * @param password the island.is authentication service password
+	 * @param keystorePath the path to the key store file
+	 * @param keystorePassword the password for the key store
 	 */
-	public USIslandIsAuthenticationClient( String token, String userIp, String username, String password ) {
+	public USIslandIsAuthenticationClient( String token, String userIp, String username, String password, String keystorePath, String keystorePassword ) {
 		_token = token;
 		_userIp = userIp;
 		_username = username;
 		_password = password;
+
+		logger.debug( "Using keystore file at: " + keystorePath );
+		System.setProperty( "javax.net.ssl.trustStore", keystorePath );
+		System.setProperty( "javax.net.ssl.trustStorePassword", keystorePassword );
 	}
 
 	/**
