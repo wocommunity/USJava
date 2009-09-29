@@ -43,7 +43,7 @@ public class TestUSStringUtilities {
 		assertFalse( USStringUtilities.stringHasValueTrimmed( " " ) );
 		assertTrue( USStringUtilities.stringHasValueTrimmed( "1234" ) );
 		assertFalse( USStringUtilities.stringHasValueTrimmed( null ) );
-		assertTrue( USStringUtilities.stringHasValueTrimmed( "null" ) ); // note that this function does not check for null string values
+		assertTrue( USStringUtilities.stringHasValueTrimmed( "null" ) );
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class TestUSStringUtilities {
 	}
 
 	@Test
-	public void areSimilar() {
+	public void areSimilar1() {
 
 		for( String nextString : PAIRS_THAT_ARE_SIMILAR ) {
 			String[] a = nextString.split( ";" );
@@ -104,21 +104,17 @@ public class TestUSStringUtilities {
 	}
 
 	@Test
-	public void padString() {
-		assertTrue( USStringUtilities.padString( "asdf", 5 ).equals( "asdf " ) );
-		assertTrue( USStringUtilities.padString( "asdfasdf", 5 ).equals( "asdfasdf" ) );
-	}
-
-	@Test
 	public void padLeft() {
-		assertTrue( USStringUtilities.padLeft( "asdf", "*", 5 ).equals( "*asdf" ) );
-		assertTrue( USStringUtilities.padLeft( "asdfasdf", "*", 5 ).equals( "asdfasdf" ) );
-		assertTrue( USStringUtilities.padLeft( "asdf", " ", 5 ).equals( " asdf" ) );
-		assertTrue( USStringUtilities.padLeft( "asdf asdf", " ", 10 ).equals( " asdf asdf" ) );
+		assertEquals( "*asdf", USStringUtilities.padLeft( "asdf", "*", 5 ) );
+		assertEquals( "asdfasdf", USStringUtilities.padLeft( "asdfasdf", "*", 5 ) );
+		assertEquals( " asdf", USStringUtilities.padLeft( "asdf", " ", 5 ) );
+		assertEquals( " asdf asdf", USStringUtilities.padLeft( "asdf asdf", " ", 10 ) );
 	}
 
 	@Test
 	public void padRight() {
+		assertTrue( USStringUtilities.padRight( "asdf", " ", 5 ).equals( "asdf " ) );
+		assertTrue( USStringUtilities.padRight( "asdfasdf", " ", 5 ).equals( "asdfasdf" ) );
 		assertTrue( USStringUtilities.padRight( "asdf", "*", 5 ).equals( "asdf*" ) );
 		assertTrue( USStringUtilities.padRight( "asdfasdf", "*", 5 ).equals( "asdfasdf" ) );
 		assertTrue( USStringUtilities.padRight( "asdf", " ", 5 ).equals( "asdf " ) );
@@ -311,10 +307,11 @@ public class TestUSStringUtilities {
 	}
 
 	@Test
-	public void abbrString() {
-		assertEquals( USStringUtilities.abbrString( "the lazy cat crawled under the hyper dog", 5 ), "th..." );
-		assertEquals( USStringUtilities.abbrString( "the lazy cat crawled under the hyper dog", 0 ), "..." );
-		assertEquals( USStringUtilities.abbrString( "", 5 ), "" );
+	public void abbreviate() {
+		assertEquals( null, USStringUtilities.abbreviate( null, 5 ) );
+		assertEquals( "th...", USStringUtilities.abbreviate( "the lazy cat crawled under the hyper dog", 5 ) );
+		assertEquals( "...", USStringUtilities.abbreviate( "the lazy cat crawled under the hyper dog", 0 ) );
+		assertEquals( "", USStringUtilities.abbreviate( "", 5 ) );
 	}
 
 	@Test
