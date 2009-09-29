@@ -309,7 +309,7 @@ public class USIslandIsAuthenticationClient {
 
 		SSLSocketFactory sf = (SSLSocketFactory)SSLSocketFactory.getDefault();
 		SSLSocket socket = null;
-		StringBuffer response = new StringBuffer();
+		StringBuilder response = new StringBuilder();
 
 		try {
 			socket = (SSLSocket)sf.createSocket( SERVER, PORT );
@@ -322,7 +322,7 @@ public class USIslandIsAuthenticationClient {
 			dataOut.write( soapMessageBody( _token, _userIp ) );
 			dataOut.flush();
 
-			StringBuffer xmlResponseHeaders = new StringBuffer();
+			StringBuilder xmlResponseHeaders = new StringBuilder();
 
 			// Read the response headers
 			String line;

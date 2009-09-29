@@ -142,7 +142,7 @@ public class USIPRange {
 	}
 
 	public String toString() {
-		StringBuffer b = new StringBuffer();
+		StringBuilder b = new StringBuilder();
 
 		for( SingleIPRange s : ranges ) {
 			b.append( s );
