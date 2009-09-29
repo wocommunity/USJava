@@ -17,7 +17,7 @@ import org.slf4j.*;
 public class USStringUtilities extends Object {
 
 	/**
-	 * Logger used for logging activites of this class.
+	 * Logger used for logging activities of this class.
 	 */
 	private static final Logger logger = LoggerFactory.getLogger( USStringUtilities.class );
 
