@@ -328,7 +328,7 @@ public class USStringUtilities extends Object {
 	public static String padLeft( String string, String padString, int desiredLength ) {
 
 		String str = (string != null) ? string : "";
-		StringBuffer strBuff = new StringBuffer();
+		StringBuilder strBuff = new StringBuilder();
 
 		int strLength = str.length();
 
@@ -354,7 +354,7 @@ public class USStringUtilities extends Object {
 	public static String padRight( String string, String padString, int desiredLength ) {
 
 		String str = (string != null) ? string : "";
-		StringBuffer strBuff = new StringBuffer();
+		StringBuilder strBuff = new StringBuilder();
 
 		int strLength = str.length();
 
@@ -416,7 +416,7 @@ public class USStringUtilities extends Object {
 		}
 
 		try {
-			StringBuffer out = new StringBuffer();
+			StringBuilder out = new StringBuilder();
 			byte[] b = new byte[4096];
 
 			for( int n; (n = in.read( b )) != -1; ) {
@@ -943,7 +943,7 @@ public class USStringUtilities extends Object {
 
 		char entitieStart = '&';
 		char entitieStop = ';';
-		StringBuffer out = new StringBuffer();
+		StringBuilder out = new StringBuilder();
 		int entityIdx = 0;
 		int entitiesSize = escapeChart.size();
 		String[][] htmlEntities = new String[entitiesSize][2];
@@ -995,7 +995,7 @@ public class USStringUtilities extends Object {
 			return "";
 		}
 
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		int n = s.length();
 		for( int i = 0; i < n; i++ ) {
 			char c = s.charAt( i );
@@ -1021,7 +1021,7 @@ public class USStringUtilities extends Object {
 		if( !stringHasValue( baseURL ) )
 			baseURL = "";
 
-		StringBuffer b = new StringBuffer();
+		StringBuilder b = new StringBuilder();
 		b.append( baseURL );
 
 		if( parameters == null ) {
@@ -1061,7 +1061,7 @@ public class USStringUtilities extends Object {
 		int begin, end;
 		int oldLength = old.length();
 		int length = buffer.length();
-		StringBuffer convertedString = new StringBuffer( length + 100 );
+		StringBuilder convertedString = new StringBuilder( length + 100 );
 
 		begin = 0;
 		while( begin < length ) {
