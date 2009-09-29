@@ -56,8 +56,10 @@ public class USStringUtilities extends Object {
 	 */
 	private static final String[] SIMILAR_CHARACTERS = new String[] { "A;Á", "E;É", "I;Í;1", "I;Í;1", "O;Ó;0", "U;Ú", "Y;Ý" };
 
-	// Most common HTML entity escape characters.. 
-	// Unicode int value = { Unicode hex value, Character, HTML Entity }
+	/**
+	 * Most common HTML entity escape characters..
+	 * Unicode int value = { Unicode hex value, Character, HTML Entity }
+	 */
 	private static final Map<Integer, String[]> escapeChart = new HashMap<Integer, String[]>();
 
 	static {
