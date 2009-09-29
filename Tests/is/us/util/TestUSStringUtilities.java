@@ -66,8 +66,8 @@ public class TestUSStringUtilities {
 
 	@Test
 	public void stringFromDataUsingEncoding() {
-		assertTrue( USStringUtilities.stringFromDataUsingEncoding( "asdf".getBytes(), "UTF-8" ).equals( "asdf" ) );
-		assertTrue( USStringUtilities.stringFromDataUsingEncoding( null, "UTF-8" ) == null );
+		assertEquals( "asdf", USStringUtilities.stringFromDataUsingEncoding( "asdf".getBytes(), "UTF-8" ) );
+		assertEquals( null, USStringUtilities.stringFromDataUsingEncoding( null, "UTF-8" ) );
 	}
 
 	@Test
@@ -113,20 +113,21 @@ public class TestUSStringUtilities {
 
 	@Test
 	public void padRight() {
-		assertTrue( USStringUtilities.padRight( "asdf", " ", 5 ).equals( "asdf " ) );
-		assertTrue( USStringUtilities.padRight( "asdfasdf", " ", 5 ).equals( "asdfasdf" ) );
-		assertTrue( USStringUtilities.padRight( "asdf", "*", 5 ).equals( "asdf*" ) );
-		assertTrue( USStringUtilities.padRight( "asdfasdf", "*", 5 ).equals( "asdfasdf" ) );
-		assertTrue( USStringUtilities.padRight( "asdf", " ", 5 ).equals( "asdf " ) );
-		assertTrue( USStringUtilities.padRight( "asdf asdf", " ", 10 ).equals( "asdf asdf " ) );
+		assertEquals( "asdf ", USStringUtilities.padRight( "asdf", " ", 5 ) );
+		assertEquals( "asdfasdf", USStringUtilities.padRight( "asdfasdf", " ", 5 ) );
+		assertEquals( "asdf*", USStringUtilities.padRight( "asdf", "*", 5 ) );
+		assertEquals( "asdfasdf", USStringUtilities.padRight( "asdfasdf", "*", 5 ) );
+		assertEquals( "asdf ", USStringUtilities.padRight( "asdf", " ", 5 ) );
+		assertEquals( "asdf asdf ", USStringUtilities.padRight( "asdf asdf", " ", 10 ) );
 	}
 
 	@Test
 	public void writeStringToFileUsingEncoding() {
 		String testPath = USTestUtilities.documentPath( this.getClass(), "writeStringToFileUsingEncoding.txt" );
+
 		try {
 			USStringUtilities.writeStringToFileUsingEncoding( "the lazy cat crawled under the hyper dog", new File( testPath ), "utf-8" );
-			assertEquals( USTestUtilities.streamDigest( testPath ), "eab01c6dd27ef0193bc899b52b51919" );
+			assertEquals( "eab01c6dd27ef0193bc899b52b51919", USTestUtilities.streamDigest( testPath ) );
 		}
 		catch( Exception e ) {
 			fail( e.getMessage() );
@@ -136,9 +137,10 @@ public class TestUSStringUtilities {
 	@Test
 	public void readStringFromURLUsingEncoding() {
 		String testPath = USTestUtilities.documentPath( this.getClass(), "writeStringToFileUsingEncoding.txt" );
+
 		try {
 			String retString = USStringUtilities.readStringFromFileUsingEncoding( new File( testPath ), "utf-8" );
-			assertEquals( retString, "the lazy cat crawled under the hyper dog" );
+			assertEquals( "the lazy cat crawled under the hyper dog", retString );
 		}
 		catch( Exception e ) {
 			fail( e.getMessage() );
@@ -168,9 +170,10 @@ public class TestUSStringUtilities {
 	@Test
 	public void readStringFromFileUsingEncoding() {
 		String testPath = USTestUtilities.documentPath( this.getClass(), "writeStringToFileUsingEncoding.txt" );
+
 		try {
 			String retString = USStringUtilities.readStringFromFileUsingEncoding( new File( testPath ), "utf-8" );
-			assertEquals( retString, "the lazy cat crawled under the hyper dog" );
+			assertEquals( "the lazy cat crawled under the hyper dog", retString );
 		}
 		catch( Exception e ) {
 			fail( e.getMessage() );
@@ -179,20 +182,20 @@ public class TestUSStringUtilities {
 
 	@Test
 	public void cleanupPermno() {
-		assertEquals( USStringUtilities.cleanupPermno( "ox279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupPermno( "ox 279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupPermno( "ox-279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupPermno( "OX279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupPermno( "OX  279" ), "OX279" );
+		assertEquals( "OX279", USStringUtilities.cleanupPermno( "ox279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupPermno( "ox 279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupPermno( "ox-279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupPermno( "OX279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupPermno( "OX  279" ) );
 	}
 
 	@Test
 	public void cleanupRegno() {
-		assertEquals( USStringUtilities.cleanupRegno( "ox279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupRegno( "ox 279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupRegno( "ox-279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupRegno( "OX279" ), "OX279" );
-		assertEquals( USStringUtilities.cleanupRegno( "OX  279" ), "OX279" );
+		assertEquals( "OX279", USStringUtilities.cleanupRegno( "ox279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupRegno( "ox 279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupRegno( "ox-279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupRegno( "OX279" ) );
+		assertEquals( "OX279", USStringUtilities.cleanupRegno( "OX  279" ) );
 	}
 
 	@Test
