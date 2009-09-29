@@ -290,7 +290,10 @@ public class TestUSStringUtilities {
 
 	@Test
 	public void activateHyperlinksInString() {
-		assertEquals( USStringUtilities.activateHyperlinksInString( "a http://www.us.is/vedur" ), "a <a href=\"http://www.us.is/vedur\">http://www.us.is/vedur</a>" );
+		assertEquals( "a <a href=\"http://www.us.is/vedur\">http://www.us.is/vedur</a>", USStringUtilities.activateHyperlinksInString( "a http://www.us.is/vedur" ) );
+		assertEquals( "bla <a href=\"http://www.gylfiþórnýsisson.is/\">http://www.gylfiþórnýsisson.is/</a> smu", USStringUtilities.activateHyperlinksInString( "bla http://www.gylfiþórnýsisson.is/ smu" ) );
+		assertEquals( "", USStringUtilities.activateHyperlinksInString( "" ) );
+		assertEquals( null, USStringUtilities.activateHyperlinksInString( null ) );
 	}
 
 	@Test

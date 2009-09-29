@@ -755,7 +755,7 @@ public class USStringUtilities extends Object {
 		if( string == null )
 			return null;
 
-		return string.replaceAll( "(((ht|f)(tp)(s?)://)([a-zA-Z0-9]*(.))?[a-zA-Z0-9]*((\\.)[a-zA-Z]{2,5})(/[\\w|\\d|\\.|%|&|;|=|\\?]*)*)(\\S)", "<a href=\"$0\">$0</a>" );
+		return string.replaceAll( "(((ht|f)(tp)(s?)://)([a-zA-Z0-9áÁðÐéÉíÍóÓuÚýÝþÞæÆöÖ]*(.))?[a-zA-Z0-9áÁðÐéÉíÍóÓuÚýÝþÞæÆöÖ]*((\\.)[a-zA-Z0-9áÁðÐéÉíÍóÓuÚýÝþÞæÆöÖ]{2,5})(/[\\w|\\d|\\.|%|&|;|=|\\?]*)*)(\\S)", "<a href=\"$0\">$0</a>" );
 	}
 
 	/**
