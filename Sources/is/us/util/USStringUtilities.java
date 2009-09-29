@@ -21,7 +21,19 @@ public class USStringUtilities extends Object {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger( USStringUtilities.class );
 
+	/**
+	 * Name of our default encoding.
+	 */
+	private static final String UTF_8 = "UTF-8";
+
+	/**
+	 * Long names used when formatting byte-sizes.
+	 */
 	private static final String[] BINARY_SIZE_NAME = new String[] { "bytes", "kilobytes", "megabytes", "gigabytes", "terabytes", "petabytes", "exabytes", "zettabytes", "yottabytes" };
+
+	/**
+	 * Short names used when formatting byte-sizes.
+	 */
 	private static final String[] BINARY_SIZE_SYMBOL = new String[] { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
 	/**
@@ -29,6 +41,9 @@ public class USStringUtilities extends Object {
 	 */
 	private static final String ICELANDIC_DECIMAL_FORMAT_PATTERN = "#,###.000";
 
+	/**
+	 * Icelandic formatting symbols.
+	 */
 	private static final DecimalFormatSymbols ICELANDIC_DECIMAL_FORMAT_SYMBOLS = new DecimalFormatSymbols( new Locale( "is" ) );
 
 	/**
@@ -37,18 +52,13 @@ public class USStringUtilities extends Object {
 	private static final List<String> ALLOWED_PERMNO_CHARS = Arrays.asList( new String[] { "A", "Á", "B", "C", "D", "Ð", "E", "É", "F", "G", "H", "I", "Í", "J", "K", "L", "M", "N", "O", "Ó", "P", "Q", "R", "S", "T", "U", "Ú", "V", "W", "X", "Y", "Ý", "Þ", "Z", "Æ", "Ö" } ); // 30.07.2008 Bjarni Sævarsson
 
 	/**
-	 * Name of our default encoding.
-	 */
-	private static final String UTF_8 = "UTF-8";
-
-	/**
 	 * This array contains sets of characters that can be considered similar looking.
 	 */
-	private static final List<String> SIMILAR_CHARACTERS = Arrays.asList( new String[] { "A;Á", "E;É", "I;Í;1", "I;Í;1", "O;Ó;0", "U;Ú", "Y;Ý" } );
+	private static final String[] SIMILAR_CHARACTERS = new String[] { "A;Á", "E;É", "I;Í;1", "I;Í;1", "O;Ó;0", "U;Ú", "Y;Ý" };
 
 	// Most common HTML entity escape characters.. 
 	// Unicode int value = { Unicode hex value, Character, HTML Entity }
-	private static final HashMap<Integer, String[]> escapeChart = new HashMap<Integer, String[]>();
+	private static final Map<Integer, String[]> escapeChart = new HashMap<Integer, String[]>();
 
 	static {
 		escapeChart.put( 60, new String[] { "003C", "<", "&lt;" } );
