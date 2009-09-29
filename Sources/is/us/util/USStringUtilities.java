@@ -16,40 +16,35 @@ import org.slf4j.*;
 
 public class USStringUtilities extends Object {
 
-	private static final List<String> ALLOWED_PERMNO_CHARS = Arrays.asList( new String[] { "A", "Á", "B", "C", "D", "Ð", "E", "É", "F", "G", "H", "I", "Í", "J", "K", "L", "M", "N", "O", "Ó", "P", "Q", "R", "S", "T", "U", "Ú", "V", "W", "X", "Y", "Ý", "Þ", "Z", "Æ", "Ö" } ); // 30.07.2008 Bjarni Sævarsson
-
 	/**
 	 * Logger used for logging activites of this class.
 	 */
 	private static final Logger logger = LoggerFactory.getLogger( USStringUtilities.class );
 
+	private static final String[] BINARY_SIZE_NAME = new String[] { "bytes", "kilobytes", "megabytes", "gigabytes", "terabytes", "petabytes", "exabytes", "zettabytes", "yottabytes" };
+	private static final String[] BINARY_SIZE_SYMBOL = new String[] { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
+	/**
+	 * The pattern used to format decimal numbers.
+	 */
+	private static final String ICELANDIC_DECIMAL_FORMAT_PATTERN = "#,###.000";
+
+	private static final DecimalFormatSymbols ICELANDIC_DECIMAL_FORMAT_SYMBOLS = new DecimalFormatSymbols( new Locale( "is" ) );
+
+	/**
+	 * Characters allowed for use on permno.
+	 */
+	private static final List<String> ALLOWED_PERMNO_CHARS = Arrays.asList( new String[] { "A", "Á", "B", "C", "D", "Ð", "E", "É", "F", "G", "H", "I", "Í", "J", "K", "L", "M", "N", "O", "Ó", "P", "Q", "R", "S", "T", "U", "Ú", "V", "W", "X", "Y", "Ý", "Þ", "Z", "Æ", "Ö" } ); // 30.07.2008 Bjarni Sævarsson
+
 	/**
 	 * Name of our default encoding.
 	 */
-	private static final String DEFAULT_ENCODING = "UTF-8";
+	private static final String UTF_8 = "UTF-8";
 
 	/**
 	 * This array contains sets of characters that can be considered similar looking.
 	 */
-	private static final List<String> SIMILAR_CHARACTERS = new ArrayList<String>();
-
-	private static final DecimalFormatSymbols ICELANDIC_DECIMAL_FORMAT_SYMBOLS = new DecimalFormatSymbols();
-
-	static {
-		ICELANDIC_DECIMAL_FORMAT_SYMBOLS.setDecimalSeparator( ',' );
-		ICELANDIC_DECIMAL_FORMAT_SYMBOLS.setGroupingSeparator( '.' );
-
-		SIMILAR_CHARACTERS.add( "A;Á" );
-		SIMILAR_CHARACTERS.add( "E;É" );
-		SIMILAR_CHARACTERS.add( "I;Í;1" );
-		SIMILAR_CHARACTERS.add( "O;Ó;0" );
-		SIMILAR_CHARACTERS.add( "U;Ú" );
-		SIMILAR_CHARACTERS.add( "Y;Ý" );
-	}
-
-	private static final String[] BINARY_SIZE_NAME = new String[] { "bytes", "kilobytes", "megabytes", "gigabytes", "terabytes", "petabytes", "exabytes", "zettabytes", "yottabytes" };
-	private static final String[] BINARY_SIZE_SYMBOL = new String[] { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-	private static final String ICELANDIC_DECIMAL_FORMAT_PATTERN = "#,###.000";
+	private static final List<String> SIMILAR_CHARACTERS = Arrays.asList( new String[] { "A;Á", "E;É", "I;Í;1", "I;Í;1", "O;Ó;0", "U;Ú", "Y;Ý" } );
 
 	// Most common HTML entity escape characters.. 
 	// Unicode int value = { Unicode hex value, Character, HTML Entity }
@@ -219,9 +214,6 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * Checks if the string validates as a permno (only checks format of String).
-	 * 
-	 * @author Hugi Þórðarson
-	 * @author Bjarni Sævarsson 30.07.2008->changed check from regexp
 	 */
 	public static final boolean validatePermno( String permno ) {
 
@@ -260,11 +252,12 @@ public class USStringUtilities extends Object {
 	 */
 	public static String stringFromDataUsingEncoding( byte[] sourceData, String encoding ) {
 
-		if( sourceData == null )
+		if( sourceData == null ) {
 			return null;
+		}
 
 		if( encoding == null ) {
-			encoding = DEFAULT_ENCODING;
+			encoding = UTF_8;
 		}
 
 		try {
@@ -279,8 +272,6 @@ public class USStringUtilities extends Object {
 	/**
 	 * Indicates if two characters are "similar", in the sense that they could be difficult
 	 * for humans to differentiate between.
-	 * 
-	 * @author Hugi Þórðarson
 	 */
 	public static boolean areSimilar( char char1, char char2 ) {
 		for( String nextSet : SIMILAR_CHARACTERS ) {
@@ -297,8 +288,6 @@ public class USStringUtilities extends Object {
 	/**
 	 * Indicates if two strings are "similar", in the sense that they could be
 	 * difficult for humans to differentiate between.
-	 * 
-	 * @author Hugi Þórðarson
 	 */
 	public static boolean areSimilar( String string1, String string2 ) {
 
@@ -335,8 +324,6 @@ public class USStringUtilities extends Object {
 	 * it will cut of the end of it.
 	 * 
 	 * Created to make creation of fixed length string easier.
-	 * 
-	 * @author Hugi Þórðarson
 	 */
 	public static String padString( String string, int desiredLength ) {
 
@@ -362,8 +349,6 @@ public class USStringUtilities extends Object {
 	 * it will cut of the left end of it.
 	 * 
 	 * Created to make creation of fixed length string easier.
-	 * 
-	 * @author Bjarni Sævarsson
 	 */
 	public static String padLeft( String string, String padString, int desiredLength ) {
 
@@ -389,8 +374,6 @@ public class USStringUtilities extends Object {
 	 * it will cut of the right end of it.
 	 * 
 	 * Created to make creation of fixed length string easier.
-	 * 
-	 * @author Bjarni Sævarsson
 	 */
 	public static String padRight( String string, String padString, int desiredLength ) {
 
@@ -412,8 +395,6 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * Adjusts a String to a certain length, perfect to use when creating fixed field length text files.
-	 *
-	 * @author Hugi Þórðarson
 	 */
 	public static String adjustStringToLength( String string, int desiredLength ) {
 
@@ -443,7 +424,7 @@ public class USStringUtilities extends Object {
 	public static void writeStringToFileUsingEncoding( String sourceString, File destination, String encoding ) {
 
 		if( encoding == null ) {
-			encoding = DEFAULT_ENCODING;
+			encoding = UTF_8;
 		}
 
 		try {
@@ -461,7 +442,7 @@ public class USStringUtilities extends Object {
 	public static String readStringFromURLUsingEncoding( String sourceURL, String encoding ) {
 
 		if( encoding == null ) {
-			encoding = DEFAULT_ENCODING;
+			encoding = UTF_8;
 		}
 
 		try {
@@ -479,7 +460,7 @@ public class USStringUtilities extends Object {
 	public static String readStringFromInputStreamUsingEncoding( InputStream in, String encoding ) {
 
 		if( encoding == null ) {
-			encoding = DEFAULT_ENCODING;
+			encoding = UTF_8;
 		}
 
 		try {
@@ -524,7 +505,7 @@ public class USStringUtilities extends Object {
 	public static String readStringFromFileUsingEncoding( File sourceFile, String encoding ) {
 
 		if( encoding == null ) {
-			encoding = DEFAULT_ENCODING;
+			encoding = UTF_8;
 		}
 
 		byte[] bytes = USDataUtilities.readBytesFromFile( sourceFile );
@@ -535,7 +516,6 @@ public class USStringUtilities extends Object {
 	 * Attempts to format a user entered string to the standard used in the DB.
 	 *
 	 * @param permno The permno to format.
-	 * @author Hugi Þórðarson
 	 */
 	public static String cleanupPermno( String permno ) {
 
@@ -552,7 +532,6 @@ public class USStringUtilities extends Object {
 	 * Attempts to format a string to the standard used in the DB.
 	 *
 	 * @param regno The permno to format.
-	 * @author Hugi Þórðarson
 	 */
 	public static String cleanupRegno( String regno ) {
 
@@ -663,8 +642,9 @@ public class USStringUtilities extends Object {
 	 */
 	public static String stringWithFormat( String originalString, Object... objects ) {
 
-		if( originalString == null )
+		if( originalString == null ) {
 			return null;
+		}
 
 		String VARIABLE = "\\{\\}";
 		String returnString = originalString;
@@ -752,8 +732,9 @@ public class USStringUtilities extends Object {
 	 */
 	public static String activateHyperlinksInString( String string ) {
 
-		if( string == null )
+		if( string == null ) {
 			return null;
+		}
 
 		return string.replaceAll( "(((ht|f)(tp)(s?)://)([a-zA-Z0-9áÁðÐéÉíÍóÓuÚýÝþÞæÆöÖ]*(.))?[a-zA-Z0-9áÁðÐéÉíÍóÓuÚýÝþÞæÆöÖ]*((\\.)[a-zA-Z0-9áÁðÐéÉíÍóÓuÚýÝþÞæÆöÖ]{2,5})(/[\\w|\\d|\\.|%|&|;|=|\\?]*)*)(\\S)", "<a href=\"$0\">$0</a>" );
 	}
@@ -763,8 +744,9 @@ public class USStringUtilities extends Object {
 	 */
 	public static String activateTwitterUsersInString( String string ) {
 
-		if( string == null )
+		if( string == null ) {
 			return null;
+		}
 
 		return string.replaceAll( "@(\\w+)", "<a href=\"http://www.twitter.com/$1\">@$1</a>" );
 	}
@@ -774,13 +756,15 @@ public class USStringUtilities extends Object {
 	 */
 	public static String fixUrl( String url ) {
 
-		if( !stringHasValue( url ) )
+		if( !stringHasValue( url ) ) {
 			return null;
+		}
 
 		url = url.trim().toLowerCase();
 
-		if( url.indexOf( "http://" ) == -1 )
+		if( url.indexOf( "http://" ) == -1 ) {
 			url = "http://" + url;
+		}
 
 		return url;
 	}
@@ -813,12 +797,15 @@ public class USStringUtilities extends Object {
 	 * Abbreviates a string if it exceeds length and appends three dots. 
 	 */
 	public static String abbrString( String s, int length ) {
+
 		if( s == null ) {
 			return "";
 		}
+
 		String trailer = "...";
 		int trailerLen = trailer.length();
 		int newLen = (length > trailerLen) ? length - trailerLen : length;
+
 		if( s != null && s.length() > length && newLen >= 0 ) {
 			return s.substring( 0, newLen ) + "...";
 		}
@@ -832,7 +819,6 @@ public class USStringUtilities extends Object {
 	 * 
 	 * @param 	bytes 			The bytes to format
 	 * @return 	A formated String representation of the bytes
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatBytes( double bytes ) {
 		return formatBytes( bytes, 0, 2, "", false );
@@ -844,7 +830,6 @@ public class USStringUtilities extends Object {
 	 * 
 	 * @param 	bytes 			The bytes to format
 	 * @return 	A formated String representation of the bytes
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatBytes( double bytes, boolean showFullName ) {
 		String devider = (showFullName) ? " " : "";
@@ -858,7 +843,6 @@ public class USStringUtilities extends Object {
 	 * @param 	minFractions 	Sets the minimum number of digits allowed in the fraction portion of a number
 	 * @param 	maxFractions 	Sets the maximum number of digits allowed in the fraction portion of a number
 	 * @return 	A formated String representation of the bytes
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatBytes( double bytes, int minFractions, int maxFractions ) {
 		return formatBytes( bytes, minFractions, maxFractions, "", false );
@@ -872,7 +856,6 @@ public class USStringUtilities extends Object {
 	 * @param 	maxFractions 	Sets the maximum number of digits allowed in the fraction portion of a number
 	 * @param 	nrNameDivider 	The string placed between the formated number and the binary symbol/name
 	 * @return 	A formated String representation of the bytes
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatBytes( double bytes, int minFractions, int maxFractions, String nrNameDivider ) {
 		return formatBytes( bytes, minFractions, maxFractions, nrNameDivider, false );
@@ -887,7 +870,6 @@ public class USStringUtilities extends Object {
 	 * @param 	nrNameDivider 	The string placed between the formated number and the binary symbol/name
 	 * @param 	showFullName 	Should the full binary name be shown
 	 * @return 	A formated String representation of the bytes
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatBytes( double bytes, int minFractions, int maxFractions, String nrNameDivider, boolean showFullName ) {
 		int divCounter = 0;
@@ -911,7 +893,6 @@ public class USStringUtilities extends Object {
 	 * 
 	 * @param 	number 				The number to be formated
 	 * @return 	A formated String representation of the double number
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatDouble( double number ) {
 		return formatDouble( number, 0, 2, false );
@@ -923,7 +904,6 @@ public class USStringUtilities extends Object {
 	 * @param 	number 				The number to be formated
 	 * @param 	nrOfDecimalPlaces 	Number of decimal places to round to
 	 * @return 	A formated String representation of the double number
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatDouble( double number, int nrOfDecimalPlaces ) {
 		return formatDouble( number, nrOfDecimalPlaces, nrOfDecimalPlaces, false );
@@ -936,7 +916,6 @@ public class USStringUtilities extends Object {
 	 * @param 	nrOfDecimalPlaces 	Number of decimal places to round to
 	 * @param 	forceDecimalPlaces 	Should the decimal places be forced, e.g. 1.000,00
 	 * @return 	A formated String representation of the double number
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatDouble( double number, int nrOfDecimalPlaces, boolean forceDecimalPlaces ) {
 		return formatDouble( number, 0, nrOfDecimalPlaces, forceDecimalPlaces );
@@ -949,7 +928,6 @@ public class USStringUtilities extends Object {
 	 * @param 	nrOfDecimalPlaces 	Number of decimal places to round to
 	 * @param 	forceDecimalPlaces 	Should the decimal places be forced, e.g. 1.000,00
 	 * @return 	A formated String representation of the double number
-	 * @author 	Bjarni Sævarsson
 	 */
 	public static String formatDouble( double number, int nrOfDecimalPlaces, int maxNrOfDecimalPlaces, boolean forceDecimalPlaces ) {
 		DecimalFormat fmt = new DecimalFormat( ICELANDIC_DECIMAL_FORMAT_PATTERN, ICELANDIC_DECIMAL_FORMAT_SYMBOLS );
@@ -982,8 +960,9 @@ public class USStringUtilities extends Object {
 	 */
 	public static String cleanupPreRegistrationNumber( String s ) {
 
-		if( s == null )
+		if( s == null ) {
 			return null;
+		}
 
 		s = s.trim();
 		s = s.toUpperCase();
@@ -1003,9 +982,9 @@ public class USStringUtilities extends Object {
 	 * 
 	 * @param s String to parse
 	 * @return String with un-escaped non-ascii characters
-	 * @author Bjarni Sævarsson
 	 */
 	public static final String unescapeHTML( String s ) {
+
 		if( s == null ) {
 			return "";
 		}
@@ -1057,12 +1036,13 @@ public class USStringUtilities extends Object {
 	 * 
 	 * @param s String to parse
 	 * @return String with escaped non-ascii characters
-	 * @author Bjarni Sævarsson
 	 */
 	public static final String escapeHTML( String s ) {
+
 		if( s == null ) {
 			return "";
 		}
+
 		StringBuffer buffer = new StringBuffer();
 		int n = s.length();
 		for( int i = 0; i < n; i++ ) {
@@ -1117,9 +1097,8 @@ public class USStringUtilities extends Object {
 		return b.toString();
 	}
 
-	/*------ The code below is ripped from the Project Wonder frameworks. ---------*/
-
-	/** removes any character which is in characters from the source string
+	/**
+	 * Removes any character which is in characters from the source string.
 	 * 
 	 * @param source the string which will be modified
 	 * @param characters the characters that are not allowed to be in source
@@ -1139,6 +1118,7 @@ public class USStringUtilities extends Object {
 
 	/**
 	* Replaces a given string by another string in a string.
+	* 
 	* @param old string to be replaced
 	* @param newString to be inserted
 	* @param buffer string to have the replacement done on it
@@ -1171,12 +1151,14 @@ public class USStringUtilities extends Object {
 	/**
 	 * Counts the number of occurrences of a particular
 	 * <code>char</code> in a given string.
+	 * 
 	 * @param c char to count in string
 	 * @param s string to look for specified char in.
 	 * @return number of occurences of a char in the string
 	 */
 	private static int numberOfOccurrencesOfCharInString( char c, String s ) {
 		int result = 0;
+
 		if( s != null ) {
 			for( int i = 0; i < s.length(); )
 				if( s.charAt( i++ ) == c )
@@ -1216,36 +1198,13 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Missing comments! 
-	 */
-	public static boolean isNumeric( String nr ) {
-		try {
-			Double.parseDouble( nr );
-		}
-		catch( NumberFormatException e ) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * Missing comments! 
-	 */
-	public static boolean isNatural( String nr ) {
-		int maxDigits = (Long.MAX_VALUE + "").length();
-		if( nr.matches( "[0-9]{1," + maxDigits + "}" ) ) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Checks if the specified String contains only digits. 
 	 * 
 	 * @param aString the string to check
 	 * @return true if the string contains only digits, false otherwise
 	 */
 	public static boolean isDigitsOnly( String aString ) {
+
 		for( int i = aString.length(); i-- > 0; ) {
 			char c = aString.charAt( i );
 			if( !Character.isDigit( c ) )
