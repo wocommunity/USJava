@@ -1098,25 +1098,6 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Removes any character which is in characters from the source string.
-	 * 
-	 * @param source the string which will be modified
-	 * @param characters the characters that are not allowed to be in source
-	 * @return a new string without any characters from the characters argument
-	 */
-	private static String removeCharacters( String source, String characters ) {
-		StringBuffer buf = new StringBuffer();
-		int l = source.length();
-		for( int i = 0; i < l; i++ ) {
-			char c = source.charAt( i );
-			if( characters.indexOf( c ) == -1 ) {
-				buf.append( c );
-			}
-		}
-		return buf.toString();
-	}
-
-	/**
 	* Replaces a given string by another string in a string.
 	* 
 	* @param old string to be replaced
