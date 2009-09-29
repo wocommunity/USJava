@@ -389,21 +389,43 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	  * Fetches the given string from an URL, using the given encoding.
-	  */
+	 * Fetches the given string from an URL, using the given encoding.
+	 * 
+	 * @param url the URL to read from
+	 * @return the string that was read
+	 */
 	public static String readStringFromURLUsingEncoding( String sourceURL, String encoding ) {
+
+		if( sourceURL == null ) {
+			return null;
+		}
 
 		if( encoding == null ) {
 			encoding = UTF_8;
 		}
 
+		InputStream is = null;
+		String result = null;
+		URL url = null;
+
 		try {
-			return stringFromURL( new URL( sourceURL ), encoding );
+			url = new URL( sourceURL );
+			is = url.openStream();
+			result = readStringFromInputStreamUsingEncoding( is, encoding );
 		}
 		catch( Exception e ) {
-			logger.error( "Could not read string from URL", e );
-			return null;
+			logger.error( "Error while downloading string from url: " + url, e );
 		}
+		finally {
+			try {
+				is.close();
+			}
+			catch( IOException e ) {
+				logger.error( "Error while downloading string from url: " + url, e );
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -1097,36 +1119,6 @@ public class USStringUtilities extends Object {
 				if( s.charAt( i++ ) == c )
 					result++;
 		}
-		return result;
-	}
-
-	/**
-	 * Returns a string from the contents of the given URL.
-	 * 
-	 * @param url the URL to read from
-	 * @return the string that was read
-	 * @throws IOException if the connection fails
-	 */
-	private static String stringFromURL( URL url, String encoding ) {
-		InputStream is = null;
-		String result = null;
-
-		try {
-			is = url.openStream();
-			result = readStringFromInputStreamUsingEncoding( is, encoding );
-		}
-		catch( Exception e ) {
-			logger.error( "Error when downloading string from url: " + url, e );
-		}
-		finally {
-			try {
-				is.close();
-			}
-			catch( IOException e ) {
-				logger.error( "Error when downloading string from url: " + url, e );
-			}
-		}
-
 		return result;
 	}
 
