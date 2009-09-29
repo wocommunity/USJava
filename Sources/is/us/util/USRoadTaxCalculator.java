@@ -10,8 +10,6 @@ package is.us.util;
  * http://www.rsk.is/einstakl/skattar/bifreida
  * 
  * @author Hugi Thordarson
- * 
- * TODO: Even though this class is currently only used to calculate estimates, monetary values should be represented by BigDecimal for optimal accuracy.
  */
 
 public class USRoadTaxCalculator {

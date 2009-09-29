@@ -49,7 +49,7 @@ public class USImageUtilities {
 	 */
 	public static byte[] scale( byte[] imageData, int width, int height, int qualityPercent, CodecType codecType ) {
 		BufferedImage inImage = bufferedImageFromData( imageData );
-		BufferedImage outImage = scale( inImage, width, height ); // TODO: reuse inImage BufferedImage
+		BufferedImage outImage = scale( inImage, width, height );
 		return encode( outImage, qualityPercent, codecType );
 	}
 
@@ -84,7 +84,7 @@ public class USImageUtilities {
 	 */
 	public static byte[] createThumbnail( byte[] imageData, int maxWidth, int maxHeight, int qualityPercent, CodecType codecType ) {
 		BufferedImage inImage = bufferedImageFromData( imageData );
-		BufferedImage outImage = createThumbnail( inImage, maxWidth, maxHeight );// TODO: reuse inImage BufferedImage
+		BufferedImage outImage = createThumbnail( inImage, maxWidth, maxHeight );
 		return encode( outImage, qualityPercent, codecType );
 	}
 
