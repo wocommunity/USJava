@@ -320,31 +320,6 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * This method will adjust a String to a certain length. If the string is
-	 * too long, it pads it with spaces on the left. If the string is too short,
-	 * it will cut of the end of it.
-	 * 
-	 * Created to make creation of fixed length string easier.
-	 */
-	public static String padString( String string, int desiredLength ) {
-
-		String str = (string != null) ? string : "";
-		StringBuffer strBuff = new StringBuffer();
-		int strLength = str.length();
-
-		if( string != null )
-			strBuff.append( string );
-
-		if( desiredLength > 0 && desiredLength > strLength ) {
-			for( int i = 0; i <= desiredLength; i++ ) {
-				if( i > strLength )
-					strBuff.append( ' ' );
-			}
-		}
-		return strBuff.toString();
-	}
-
-	/**
-	 * This method will adjust a String to a certain length. If the string is
 	 * too short, it pads it on the left. If the string is too long,
 	 * it will cut of the left end of it.
 	 * 
@@ -399,7 +374,7 @@ public class USStringUtilities extends Object {
 	public static String adjustStringToLength( String string, int desiredLength ) {
 
 		if( string == null )
-			return padString( null, desiredLength );
+			return padRight( null, " ", desiredLength );
 
 		int originalLength = string.length();
 
@@ -412,7 +387,7 @@ public class USStringUtilities extends Object {
 		}
 
 		if( originalLength < desiredLength ) {
-			return padString( string, desiredLength );
+			return padRight( string, " ", desiredLength );
 		}
 
 		return null;
@@ -796,21 +771,21 @@ public class USStringUtilities extends Object {
 	/**
 	 * Abbreviates a string if it exceeds length and appends three dots. 
 	 */
-	public static String abbrString( String s, int length ) {
+	public static String abbreviate( String string, int length ) {
 
-		if( s == null ) {
-			return "";
+		if( string == null ) {
+			return null;
 		}
 
 		String trailer = "...";
 		int trailerLen = trailer.length();
 		int newLen = (length > trailerLen) ? length - trailerLen : length;
 
-		if( s != null && s.length() > length && newLen >= 0 ) {
-			return s.substring( 0, newLen ) + "...";
+		if( string != null && string.length() > length && newLen >= 0 ) {
+			return string.substring( 0, newLen ) + "...";
 		}
 
-		return s;
+		return string;
 	}
 
 	/**
