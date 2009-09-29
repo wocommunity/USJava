@@ -15,5 +15,5 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 
 @RunWith( Suite.class )
-@SuiteClasses( { TestUSDataUtilities.class, TestUSDateUtilities.class, TestUSHolidays.class, TestUSImageUtilities.class, TestUSIPRange.class, TestUSNumberUtilities.class, TestUSPersidnoFormatter.class, TestUSPersidnoUtilities.class, TestUSPhoneUtilities.class, TestUSRoadTaxCalculator.class, TestUSStringUtilities.class, TestUSTemplateSimple.class } )
+@SuiteClasses( { TestUSDataUtilities.class, TestUSDateUtilities.class, TestUSHolidays.class, TestUSImageUtilities.class, TestUSIPRange.class, TestUSNumberUtilities.class, TestUSPersidnoFormatter.class, TestUSPersidnoUtilities.class, TestUSPhoneUtilities.class, TestUSRoadTaxCalculator.class, TestUSStopWatch.class, TestUSStringUtilities.class, TestUSTemplateSimple.class } )
 public class TestAll {}
