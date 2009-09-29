@@ -6,16 +6,22 @@ import java.net.*;
 import org.slf4j.*;
 
 /**
-* Contains various utility methods for handling data,
-* reading and writing data to and from disks or over a network connection etc.
-*
-* @author Hugi Þórðarson
-*/
+ * Contains various utility methods for handling data,
+ * reading and writing data to and from disks or over a network connection etc.
+ * 
+ * @author Hugi Þórðarson
+ */
 
 public class USDataUtilities {
 
+	/**
+	 * Logger.
+	 */
 	private static final Logger logger = LoggerFactory.getLogger( USDataUtilities.class );
 
+	/**
+	 * No instances created.
+	 */
 	private USDataUtilities() {}
 
 	/**
