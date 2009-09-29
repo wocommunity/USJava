@@ -122,14 +122,6 @@ public class TestUSStringUtilities {
 	}
 
 	@Test
-	public void adjustStringToLength() {
-		assertTrue( USStringUtilities.adjustStringToLength( "asdf", 5 ).equals( "asdf " ) );
-		assertTrue( USStringUtilities.adjustStringToLength( "asdfasdf", 5 ).equals( "asdfa" ) );
-		assertTrue( USStringUtilities.adjustStringToLength( "as df", 5 ).equals( "as df" ) );
-		assertTrue( USStringUtilities.adjustStringToLength( "asdf asdf", 10 ).equals( "asdf asdf " ) );
-	}
-
-	@Test
 	public void writeStringToFileUsingEncoding() {
 		String testPath = USTestUtilities.documentPath( this.getClass(), "writeStringToFileUsingEncoding.txt" );
 		try {

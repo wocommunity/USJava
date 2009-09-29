@@ -334,8 +334,9 @@ public class USStringUtilities extends Object {
 
 		if( desiredLength > 0 && desiredLength > strLength ) {
 			for( int i = 0; i <= desiredLength; i++ ) {
-				if( i > strLength )
+				if( i > strLength ) {
 					strBuff.append( padString );
+				}
 			}
 		}
 
@@ -359,38 +360,14 @@ public class USStringUtilities extends Object {
 
 		if( desiredLength > 0 && desiredLength > strLength ) {
 			for( int i = 0; i <= desiredLength; i++ ) {
-				if( i > strLength )
+				if( i > strLength ) {
 					strBuff.append( padString );
+				}
 			}
 		}
 
 		strBuff.insert( 0, string );
 		return strBuff.toString();
-	}
-
-	/**
-	 * Adjusts a String to a certain length, perfect to use when creating fixed field length text files.
-	 */
-	public static String adjustStringToLength( String string, int desiredLength ) {
-
-		if( string == null )
-			return padRight( null, " ", desiredLength );
-
-		int originalLength = string.length();
-
-		if( originalLength == desiredLength ) {
-			return string;
-		}
-
-		if( originalLength > desiredLength ) {
-			return string.substring( 0, desiredLength );
-		}
-
-		if( originalLength < desiredLength ) {
-			return padRight( string, " ", desiredLength );
-		}
-
-		return null;
 	}
 
 	/**
