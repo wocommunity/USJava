@@ -78,6 +78,33 @@ public class USDateUtilities {
 	}
 
 	/**
+	 * @param the date to normalized
+	 * @return the given date normalized to one millisecond before next date
+	 * @author BjarniS
+	 * TODO: review
+	 */
+	public static Date normalizeToEndOfDay( Date date ) {
+		GregorianCalendar c = (GregorianCalendar)GregorianCalendar.getInstance();
+		c.setTime( date );
+		c = normalizeToEndOfDay( c );
+		return c.getTime();
+	}
+
+	/**
+	 * @param calendar the calendar to normalize
+	 * @return the given calendar normalized to one millisecond before next calendar date
+	 * @author BjarniS
+	 * TODO: review
+	 */
+	public static GregorianCalendar normalizeToEndOfDay( GregorianCalendar calendar ) {
+		calendar.set( Calendar.HOUR_OF_DAY, 23 );
+		calendar.set( Calendar.MINUTE, 59 );
+		calendar.set( Calendar.SECOND, 59 );
+		calendar.set( Calendar.MILLISECOND, 999 );
+		return calendar;
+	}
+
+	/**
 	 * Adds the given number of days to the given date
 	 * 
 	 * @param date the date to add days to
