@@ -25,18 +25,22 @@ public class USDateUtilities {
 	 */
 	public static Long numberOfDaysBetweenDates( Date date, Date anotherDate ) {
 
-		if( date == null || anotherDate == null )
+		if( date == null || anotherDate == null ) {
 			throw new IllegalArgumentException( "Unable to determine number of days between dates when both dates are not set" );
+		}
 
 		long dayDifference = 0L;
 
-		if( date.after( anotherDate ) )
+		if( date.after( anotherDate ) ) {
 			dayDifference = date.getTime() - anotherDate.getTime();
-		else
+		}
+		else {
 			dayDifference = anotherDate.getTime() - date.getTime();
+		}
 
-		if( dayDifference > 0 )
+		if( dayDifference > 0 ) {
 			dayDifference = dayDifference / MILLISECONDS_IN_DAY;
+		}
 
 		return dayDifference;
 	}
@@ -78,11 +82,21 @@ public class USDateUtilities {
 	}
 
 	/**
-	 * @param the date to normalized
-	 * @return the given date normalized to one millisecond before next date
-	 * @author BjarniS
-	 * TODO: review
+	 * @param calendar the calendar to normalize
+	 * @return the given calendar normalized to the 1. of the month
 	 */
+	public static GregorianCalendar normalizeMonth( GregorianCalendar calendar ) {
+		calendar.set( Calendar.DAY_OF_MONTH, 1 );
+		calendar = normalizeToMidnight( calendar );
+		return calendar;
+	}
+	
+	/**
+	* @param the date to normalized
+	* @return the given date normalized to one millisecond before next date
+	* @author BjarniS
+	* TODO: review
+	*/
 	public static Date normalizeToEndOfDay( Date date ) {
 		GregorianCalendar c = (GregorianCalendar)GregorianCalendar.getInstance();
 		c.setTime( date );
