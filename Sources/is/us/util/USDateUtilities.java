@@ -90,12 +90,13 @@ public class USDateUtilities {
 		calendar = normalizeToMidnight( calendar );
 		return calendar;
 	}
-	
+
+	// TODO A simple unit test would look good for these utility functions ;)
 	/**
 	* @param the date to normalized
 	* @return the given date normalized to one millisecond before next date
 	* @author BjarniS
-	* TODO: review
+	* @reviewedby Logi Helgu at Oct 13, 2009( see JIRA issue INN-739 )
 	*/
 	public static Date normalizeToEndOfDay( Date date ) {
 		GregorianCalendar c = (GregorianCalendar)GregorianCalendar.getInstance();
@@ -108,7 +109,7 @@ public class USDateUtilities {
 	 * @param calendar the calendar to normalize
 	 * @return the given calendar normalized to one millisecond before next calendar date
 	 * @author BjarniS
-	 * TODO: review
+	 * @reviewedby Logi Helgu at Oct 13, 2009( see JIRA issue INN-739 )
 	 */
 	public static GregorianCalendar normalizeToEndOfDay( GregorianCalendar calendar ) {
 		calendar.set( Calendar.HOUR_OF_DAY, 23 );
