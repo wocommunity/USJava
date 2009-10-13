@@ -1,6 +1,7 @@
 package is.us.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.text.*;
 import java.util.*;
@@ -58,6 +59,26 @@ public class TestUSDateUtilities {
 
 			actual = USDateUtilities.normalizeToMidnight( df.parse( "19990101 0000000" ) );
 			expected = df.parse( "19990101 000000000" );
+		}
+		catch( ParseException e ) {
+			assert (false);
+		}
+	}
+
+	@Test
+	public void normalizeToEndOfDay() {
+		SimpleDateFormat df = new SimpleDateFormat( "yyyyMMdd HHmmssS" );
+
+		try {
+			Date actual = USDateUtilities.normalizeToEndOfDay( df.parse( "20000131 000203100" ) );
+			Date expected = df.parse( "20000131 235959999" );
+			assertEquals( expected, actual );
+
+			actual = USDateUtilities.normalizeToMidnight( df.parse( "20002105 2400000" ) );
+			expected = df.parse( "20002105 235959999" );
+
+			actual = USDateUtilities.normalizeToMidnight( df.parse( "19990101 0000000" ) );
+			expected = df.parse( "19990101 235959999" );
 		}
 		catch( ParseException e ) {
 			assert (false);
