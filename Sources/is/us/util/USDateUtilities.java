@@ -91,7 +91,6 @@ public class USDateUtilities {
 		return calendar;
 	}
 
-	// TODO A simple unit test would look good for these utility functions ;) -> fixored
 	/**
 	* @param the date to normalized
 	* @return the given date normalized to one millisecond before next date
