@@ -1,7 +1,7 @@
 package is.us.util;
 
 import java.io.*;
-import java.net.URL;
+import java.net.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -404,6 +404,7 @@ public class USStringUtilities extends Object {
 	 * Fetches the given string from an URL, using the given encoding.
 	 * 
 	 * @param url the URL to read from
+	 * @param encoding The encoding of the data at the source URL.
 	 * @return the string that was read
 	 */
 	public static String readStringFromURLUsingEncoding( String sourceURL, String encoding ) {
@@ -413,55 +414,56 @@ public class USStringUtilities extends Object {
 		}
 
 		if( encoding == null ) {
-			encoding = UTF_8;
+			encoding = "UTF-8";
 		}
 
-		InputStream is = null;
 		String result = null;
-		URL url = null;
 
+		URL url = null;
 		try {
 			url = new URL( sourceURL );
-			is = url.openStream();
-			result = readStringFromInputStreamUsingEncoding( is, encoding );
+			URLConnection conn = url.openConnection();
+			result = readStringFromInputStreamUsingEncoding( conn.getInputStream(), encoding );
 		}
 		catch( Exception e ) {
 			logger.error( "Error while downloading string from url: " + url, e );
 		}
-		finally {
-			try {
-				is.close();
-			}
-			catch( IOException e ) {
-				logger.error( "Error while downloading string from url: " + url, e );
-			}
-		}
 
 		return result;
+
 	}
 
 	/**
 	 * Reads the given string from an Inputstream, using the given encoding.
+	 * @param encoding The encoding of the data in the input stream
 	 */
 	public static String readStringFromInputStreamUsingEncoding( InputStream in, String encoding ) {
 
 		if( encoding == null ) {
 			encoding = UTF_8;
 		}
-
+		BufferedReader br = null;
 		try {
-			StringBuilder out = new StringBuilder();
-			byte[] b = new byte[4096];
+			br = new BufferedReader( new InputStreamReader( in, encoding ) );
+			StringBuilder sb = new StringBuilder( 16384 );
 
-			for( int n; (n = in.read( b )) != -1; ) {
-				out.append( new String( b, 0, n ) );
+			String line;
+			while( (line = br.readLine()) != null ) {
+				sb.append( line );
 			}
-
-			return out.toString();
+			return sb.toString();
 		}
 		catch( Exception e ) {
 			logger.error( "Could not read string from Inputstream", e );
 			return null;
+		}
+		finally {
+			try {
+				br.close();
+			}
+			catch( IOException e ) {
+				logger.error( "Could not read string from Inputstream", e );
+			}
 		}
 	}
 
