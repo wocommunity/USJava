@@ -414,7 +414,7 @@ public class USStringUtilities extends Object {
 		}
 
 		if( encoding == null ) {
-			encoding = "UTF-8";
+			encoding = UTF_8;
 		}
 
 		String result = null;
