@@ -1,18 +1,31 @@
 package is.us.util;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.net.ssl.*;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
-import nu.xom.*;
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.ParsingException;
+import nu.xom.ValidityException;
 
-import org.slf4j.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import sun.misc.BASE64Encoder;
 
 /**
- * Handle communications with the island.is authentication service. See http://en.wikipedia.org/wiki/Security_Assertion_Markup_Language for information about SAML
+ * Handle communications with the island.is authentication service. See
+ * http://en.wikipedia.org/wiki/Security_Assertion_Markup_Language for
+ * information about SAML
  * 
  * @author Bjarni Sævarsson <bjarnis@us.is>
  * @author Atli Páll Hafsteinsson <atlip@us.is>
@@ -47,7 +60,8 @@ public class USIslandIsAuthenticationClient {
 	private Map<String, String> _samlInfo;
 
 	/**
-	 * Never construct this class using the default constructor, certain parameters required.
+	 * Never construct this class using the default constructor, certain
+	 * parameters required.
 	 */
 	@SuppressWarnings( "unused" )
 	private USIslandIsAuthenticationClient() {}
@@ -72,7 +86,8 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * @return The sysid (identifier of the system that handled the login) from the SAML response.
+	 * @return The sysid (identifier of the system that handled the login) from
+	 *         the SAML response.
 	 */
 	public String sysid() {
 		Map<String, String> samlInfo = samlInfo();
@@ -94,7 +109,8 @@ public class USIslandIsAuthenticationClient {
 
 	/**
 	 * @return The user persidno from the saml response
-	 * @throws USIslandIsAuthenticationException if there is an error getting the persidno
+	 * @throws USIslandIsAuthenticationException if there is an error getting
+	 *         the persidno
 	 */
 	public String persidno() {
 		Map<String, String> samlInfo = samlInfo();
@@ -115,9 +131,12 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * Parses the SAML message, from the soap response, and extracts the status code/message and user ssn.
+	 * Parses the SAML message, from the soap response, and extracts the status
+	 * code/message and user ssn.
+	 * 
 	 * @return the information from the SAML message
-	 * @throws USIslandIsAuthenticationException if there is an error getting the SAML info
+	 * @throws USIslandIsAuthenticationException if there is an error getting
+	 *         the SAML info
 	 */
 	private Map<String, String> samlInfo() {
 
@@ -173,7 +192,9 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * Checks for error status codes in the SAML and sets them in the information dictionary
+	 * Checks for error status codes in the SAML and sets them in the
+	 * information dictionary
+	 * 
 	 * @param info the dictionary to set the error messages in
 	 * @param soapResponseCertSaml the SAML to get status codes from
 	 * @throws USIslandIsAuthenticationException if the are errors
@@ -202,6 +223,7 @@ public class USIslandIsAuthenticationClient {
 
 	/**
 	 * Gets the attributes from the assertion and puts them in a map
+	 * 
 	 * @param info the map to put the attributes in
 	 * @param assertion the assertion
 	 */
@@ -223,6 +245,7 @@ public class USIslandIsAuthenticationClient {
 
 	/**
 	 * Parses the assertion element from the SAML message
+	 * 
 	 * @param parser the xml parser to use
 	 * @param saml the SAML message
 	 * @return the assertion element from the SAML message
@@ -278,7 +301,9 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * Check for faults in the SOAP messages and sets them in the information dictionary
+	 * Check for faults in the SOAP messages and sets them in the information
+	 * dictionary
+	 * 
 	 * @param info the dictionary to set the fault messages in
 	 * @param body the {@link nu.xom.Element} (SOAP message) to check for faults
 	 */
@@ -407,7 +432,8 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * Returns the first child element, from parent, with given name. Attempts to search in a new namespace if parent namespace returns null.
+	 * Returns the first child element, from parent, with given name. Attempts
+	 * to search in a new namespace if parent namespace returns null.
 	 * 
 	 * @param parent Element to search in.
 	 * @param name Name of the child element to return.
@@ -424,7 +450,9 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * Logs errors and throws and {@link USIslandIsAuthenticationException} exception
+	 * Logs errors and throws and {@link USIslandIsAuthenticationException}
+	 * exception
+	 * 
 	 * @param e the underlying error
 	 * @param msg the error message
 	 * @throws USIslandIsAuthenticationException
@@ -435,12 +463,21 @@ public class USIslandIsAuthenticationClient {
 	}
 
 	/**
-	 * Logs errors and throws and {@link USIslandIsAuthenticationException} exception
+	 * Logs errors and throws and {@link USIslandIsAuthenticationException}
+	 * exception
+	 * 
 	 * @param msg the error message
 	 * @throws USIslandIsAuthenticationException
 	 */
 	private void handleError( String msg ) {
 		logger.error( msg );
 		throw new USIslandIsAuthenticationException( msg );
+	}
+
+	/**
+	 * @return The Token currently being used.
+	 */
+	public String token() {
+		return _token;
 	}
 }
