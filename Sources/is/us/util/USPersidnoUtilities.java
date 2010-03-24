@@ -240,7 +240,7 @@ public class USPersidnoUtilities {
 
 	/**
 	 * Returns a persidno, formatted by inserting the specified delimiter after the birthdate.
-	 * returns an empty string if persidno is not valid.
+	 * eturns an empty string if persidno is not valid.
 	 * 
 	 * @param persidno to format
 	 * @param delimiter delimiter between the six'th and seven'th decimals
@@ -259,5 +259,32 @@ public class USPersidnoUtilities {
 		}
 
 		return persidno.substring( 0, 6 ) + delimiter + persidno.substring( 6 );
+	}
+
+	/**
+	 * @param The persidno to deduce information from.
+	 * @return The individuals next birthday, as calculated from the persidno.
+	 */
+	public static Date nextBirthday( String persidno ) {
+
+		if( persidno == null ) {
+			return null;
+		}
+
+		Integer birthDay = birthDayFromPersidno( persidno );
+		Integer birthMonth = birthMonthFromPersidno( persidno );
+
+		GregorianCalendar now = (GregorianCalendar)GregorianCalendar.getInstance();
+
+		Integer nowDay = now.get( GregorianCalendar.DAY_OF_MONTH );
+		Integer nowMonth = now.get( GregorianCalendar.MONTH ) + 1;
+
+		Integer year = now.get( GregorianCalendar.YEAR );
+
+		if( nowMonth >= birthMonth && nowDay >= birthDay ) {
+			year++;
+		}
+
+		return USDateUtilities.date( year, birthMonth, birthDay );
 	}
 }

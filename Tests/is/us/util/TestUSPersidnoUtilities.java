@@ -1,6 +1,8 @@
 package is.us.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.*;
 
@@ -87,7 +89,7 @@ public class TestUSPersidnoUtilities {
 
 		// INN-702 this company persidno is failing
 		assertTrue( USPersidnoUtilities.validatePersidno( "4612911399" ) );
-		
+
 		//		Look into these.
 		//		assertFalse( USStringUtilities.validatePersidno( "0000000000" ) );
 		//		assertFalse( USStringUtilities.validatePersidno( "1111111111" ) );
@@ -113,6 +115,24 @@ public class TestUSPersidnoUtilities {
 	@Test
 	public void ageFromPersidno() {
 		Integer n = USPersidnoUtilities.ageFromPersidno( "0911794829" );
-		assertTrue( n == 29 );
+		assertTrue( n == 30 );
+	}
+
+	/**
+	 * Note: Unless we find a way to keep me 29 forever, this test will eventually fail.
+	 * We need to find another way to provide test data.
+	 */
+	@Test
+	public void nextBirthday() {
+		Date birthday = null;
+
+		birthday = USPersidnoUtilities.nextBirthday( "0911794829" );
+		assertEquals( USDateUtilities.date( 2010, 11, 9 ), birthday );
+
+		birthday = USPersidnoUtilities.nextBirthday( "2105794279" );
+		assertEquals( USDateUtilities.date( 2010, 5, 21 ), birthday );
+
+		birthday = USPersidnoUtilities.nextBirthday( "1203833029" );
+		assertEquals( USDateUtilities.date( 2011, 3, 12 ), birthday );
 	}
 }
