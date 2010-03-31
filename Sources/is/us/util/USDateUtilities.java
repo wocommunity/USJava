@@ -215,13 +215,17 @@ public class USDateUtilities {
 	 * Calculates the age of a person given a birthdate and another date.
 	 * 
 	 * @param birthDate The birthdate of the person to check.
-	 * @param date The date at which we want to know the person's age.
+	 * @param date The date at which we want to know the person's age. If null, we assume we want the current age.
 	 * @return The person's age at [date]
 	 */
 	public static Integer ageAtDate( Date birthDate, Date date ) {
 
-		if( birthDate == null || date == null ) {
+		if( birthDate == null ) {
 			return null;
+		}
+
+		if( date == null ) {
+			date = new Date();
 		}
 
 		GregorianCalendar dateCalendar = (GregorianCalendar)GregorianCalendar.getInstance();
