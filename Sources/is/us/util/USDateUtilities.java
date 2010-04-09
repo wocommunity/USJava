@@ -10,7 +10,8 @@ import java.util.*;
 
 public class USDateUtilities {
 
-	public static final Long MILLISECONDS_IN_DAY = 86400000L;
+	public static final long MILLISECONDS_IN_DAY = 86400000L;
+	public static final long MILLISECONDS_IN_MINUTE = 1000 * 60;
 
 	/**
 	 * Compares the two dates and calculates the number of days from one date to another( both dates are included ).
@@ -167,11 +168,22 @@ public class USDateUtilities {
 	}
 
 	/**
-	 * @return a new instance of GregorianCalendar with date normalized to midnight
+	 * @return a new instance of GregorianCalendar with the current date, and normalized to midnight
 	 */
 	public static GregorianCalendar cal() {
 		GregorianCalendar cal = (GregorianCalendar)GregorianCalendar.getInstance();
 		cal = USDateUtilities.normalizeToMidnight( cal );
+		return cal;
+	}
+
+	/**
+	 * @param date The date to initialize the calendar with.
+	 * @return a new instance of GregorianCalendar with the given date, and normalized to midnight
+	 */
+	private static GregorianCalendar cal( Date date ) {
+		GregorianCalendar cal = (GregorianCalendar)GregorianCalendar.getInstance();
+		cal.setTime( date );
+		cal = normalizeToMidnight( cal );
 		return cal;
 	}
 
@@ -185,6 +197,7 @@ public class USDateUtilities {
 	 */
 	public static GregorianCalendar setToNextDayOfWeek( GregorianCalendar calendar, int weekday ) {
 		int currentDayOfWeek = calendar.get( GregorianCalendar.DAY_OF_WEEK );
+
 		if( currentDayOfWeek > weekday ) {
 			calendar.add( GregorianCalendar.DAY_OF_MONTH, -currentDayOfWeek + weekday + 7 );
 		}
@@ -202,11 +215,13 @@ public class USDateUtilities {
 	 * @return true if and only if the given date is not a saturday or a sunday.
 	 */
 	public static boolean isWorkday( Date date ) {
-		GregorianCalendar c = (GregorianCalendar)GregorianCalendar.getInstance();
-		c.setTime( date );
+		GregorianCalendar c = cal( date );
+
 		int dayOfWeek = c.get( GregorianCalendar.DAY_OF_WEEK );
-		if( dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY )
+
+		if( dayOfWeek == GregorianCalendar.SATURDAY || dayOfWeek == GregorianCalendar.SUNDAY ) {
 			return false;
+		}
 
 		return true;
 	}
@@ -215,7 +230,7 @@ public class USDateUtilities {
 	 * Calculates the age of a person given a birthdate and another date.
 	 * 
 	 * @param birthDate The birthdate of the person to check.
-	 * @param date The date at which we want to know the person's age. If null, we assume we want the current age.
+	 * @param date The date at which we want to know the person's age. If null, we assume you want the current age.
 	 * @return The person's age at [date]
 	 */
 	public static Integer ageAtDate( Date birthDate, Date date ) {
@@ -228,11 +243,8 @@ public class USDateUtilities {
 			date = new Date();
 		}
 
-		GregorianCalendar dateCalendar = (GregorianCalendar)GregorianCalendar.getInstance();
-		dateCalendar.setTime( date );
-
-		GregorianCalendar birthdateCalendar = (GregorianCalendar)GregorianCalendar.getInstance();
-		birthdateCalendar.setTime( birthDate );
+		GregorianCalendar dateCalendar = cal( date );
+		GregorianCalendar birthdateCalendar = cal( birthDate );
 
 		int ageInYears = dateCalendar.get( Calendar.YEAR ) - birthdateCalendar.get( Calendar.YEAR );
 
@@ -249,7 +261,7 @@ public class USDateUtilities {
 	/**
 	 * Constructs a date at midnight on the given day.
 	 * 
-	 * Please note that months are not zero-based! That means January = 1.
+	 * ATTENTION: Month numbers are not zero-based! That means January = 1, December = 12.
 	 */
 	public static Date date( int year, int month, int day ) {
 		GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();
