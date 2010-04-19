@@ -1,5 +1,8 @@
 package is.us.util;
 
+import java.math.BigDecimal;
+import java.text.*;
+
 /**
  * Various numeric functions
  * 
@@ -46,5 +49,24 @@ public class USNumberUtilities {
 			return 0f;
 		}
 		return kw / METRIC_HP_IN_KW;
+	}
+
+	/**
+	 * Converts a string to BigDecimal
+	 * 
+	 *  @param nr to convert, can be a formated number
+	 *  @return a BigDecimal object if conversion is successful, else null is returned.
+	 */
+	public static BigDecimal stringToBigDecimal( String nr ) {
+		DecimalFormat format = (DecimalFormat)NumberFormat.getInstance();
+		format.setParseBigDecimal( true );
+		BigDecimal number;
+		try {
+			number = (BigDecimal)format.parse( nr );
+		}
+		catch( ParseException e ) {
+			return null;
+		}
+		return number;
 	}
 }
