@@ -64,7 +64,7 @@ public class USNumberUtilities {
 		try {
 			number = (BigDecimal)format.parse( nr );
 		}
-		catch( ParseException e ) {
+		catch( Exception e ) {
 			return null;
 		}
 		return number;
