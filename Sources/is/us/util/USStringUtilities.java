@@ -1054,18 +1054,13 @@ public class USStringUtilities extends Object {
 	 */
 	public static String constructURLStringWithParameters( String baseURL, Map<String, String> parameters ) {
 
-		if( !stringHasValue( baseURL ) ) {
-			baseURL = "";
-		}
-
 		StringBuilder b = new StringBuilder();
-		b.append( baseURL );
 
-		if( parameters == null ) {
-			return b.toString();
+		if( stringHasValue( baseURL ) ) {
+			b.append( baseURL );
 		}
 
-		if( parameters.size() > 0 ) {
+		if( parameters != null && parameters.size() > 0 ) {
 			b.append( "?" );
 
 			for( String nextKey : parameters.keySet() ) {
