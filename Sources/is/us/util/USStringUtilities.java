@@ -1054,8 +1054,9 @@ public class USStringUtilities extends Object {
 	 */
 	public static String constructURLStringWithParameters( String baseURL, Map<String, String> parameters ) {
 
-		if( !stringHasValue( baseURL ) )
+		if( !stringHasValue( baseURL ) ) {
 			baseURL = "";
+		}
 
 		StringBuilder b = new StringBuilder();
 		b.append( baseURL );
@@ -1073,12 +1074,11 @@ public class USStringUtilities extends Object {
 				b.append( nextKey );
 				b.append( "=" );
 
-				if( nextValue != null )
+				if( nextValue != null ) {
 					b.append( nextValue );
-				else
-					b.append( "" );
+				}
 
-				b.append( "&" );
+				b.append( "&amp;" );
 			}
 		}
 
