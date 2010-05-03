@@ -1,6 +1,9 @@
 package is.us.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.*;
 import java.util.HashMap;
@@ -401,8 +404,8 @@ public class TestUSStringUtilities {
 		assertEquals( USStringUtilities.constructURLStringWithParameters( "", null ), "" );
 		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is" );
 		params.put( "a", "b" );
-		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is?a=b&" );
+		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is?a=b" );
 		params.put( "æ", "ð" );
-		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is?a=b&æ=ð&" );
+		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is?a=b&æ=ð" );
 	}
 }

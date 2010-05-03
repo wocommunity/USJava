@@ -442,28 +442,18 @@ public class USStringUtilities extends Object {
 		if( encoding == null ) {
 			encoding = UTF_8;
 		}
-		BufferedReader br = null;
-		try {
-			br = new BufferedReader( new InputStreamReader( in, encoding ) );
-			StringBuilder sb = new StringBuilder( 16384 );
 
-			String line;
-			while( (line = br.readLine()) != null ) {
-				sb.append( line );
+		try {
+			StringBuilder out = new StringBuilder();
+			byte[] b = new byte[4096];
+			for( int n; (n = in.read( b )) != -1; ) {
+				out.append( new String( b, 0, n, encoding ) );
 			}
-			return sb.toString();
+			return out.toString();
 		}
 		catch( Exception e ) {
 			logger.error( "Could not read string from Inputstream", e );
 			return null;
-		}
-		finally {
-			try {
-				br.close();
-			}
-			catch( IOException e ) {
-				logger.error( "Could not read string from Inputstream", e );
-			}
 		}
 	}
 
@@ -1063,7 +1053,10 @@ public class USStringUtilities extends Object {
 		if( parameters != null && parameters.size() > 0 ) {
 			b.append( "?" );
 
-			for( String nextKey : parameters.keySet() ) {
+			Iterator<String> i = parameters.keySet().iterator();
+
+			while( i.hasNext() ) {
+				String nextKey = i.next();
 				String nextValue = parameters.get( nextKey );
 
 				b.append( nextKey );
@@ -1073,7 +1066,9 @@ public class USStringUtilities extends Object {
 					b.append( nextValue );
 				}
 
-				b.append( "&amp;" );
+				if( i.hasNext() ) {
+					b.append( "&amp;" );
+				}
 			}
 		}
 
