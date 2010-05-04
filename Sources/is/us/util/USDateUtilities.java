@@ -245,12 +245,47 @@ public class USDateUtilities {
 	}
 
 	/**
+	 * Returns the next work day after the date in the given date.
+	 * 
+	 * @param date The date to check from.
+	 */
+	public Date nextWorkDay( Date date ) {
+		date = normalizeToMidnight( date );
+		date = date( year( date ), monthOfYear( date ), dayOfMonth( date ) + 1 );
+
+		while( !isWorkday( date ) ) {
+			date = date( year( date ), monthOfYear( date ), dayOfMonth( date ) + 1 );
+		}
+
+		return date;
+	}
+
+	/**
 	 * Get the year of the given date.
 	 *  
 	 * @param date The date to get the year from
 	 */
 	public static int year( Date date ) {
 		return cal( date ).get( GregorianCalendar.YEAR );
+	}
+
+	/**
+	 * Get the year of the given date.
+	 * Not. Zero. Based.
+	 *  
+	 * @param date The date to get the month from
+	 */
+	public static int monthOfYear( Date date ) {
+		return cal( date ).get( GregorianCalendar.MONTH ) + 1;
+	}
+
+	/**
+	 * Get the year of the given date.
+	 *  
+	 * @param date The date to get the year from
+	 */
+	public static int dayOfMonth( Date date ) {
+		return cal( date ).get( GregorianCalendar.DAY_OF_MONTH );
 	}
 
 	/**
