@@ -213,7 +213,7 @@ public class USDateUtilities {
 	 * @param date the date to check
 	 * @return true if the given date is not a Saturday or a Sunday.
 	 */
-	public static boolean isWorkday( Date date ) {
+	public static boolean isWeekday( Date date ) {
 		GregorianCalendar c = cal( date );
 
 		int dayOfWeek = c.get( GregorianCalendar.DAY_OF_WEEK );
@@ -226,22 +226,30 @@ public class USDateUtilities {
 	}
 
 	/**
-	 * Get the year of the given date.
-	 *  
-	 * @param date The date to get the year from
-	 */
-	public static int year( Date date ) {
-		return cal( date ).get( GregorianCalendar.YEAR );
-	}
-
-	/**
 	 * True if the given date is on a weekend.
 	 * 
 	 * @param date the date to check
 	 * @return true if the given date is on a Saturday or a Sunday.
 	 */
 	public static boolean isWeekend( Date date ) {
-		return !isWorkday( date );
+		return !isWeekday( date );
+	}
+
+	/**
+	 * 
+	 *
+	public static boolean isWorkday( Date date ) {
+		return !USDateUtilities.isWeekend( t ) && !USHolidays.isFullHoliday( t );
+	}
+	*/
+
+	/**
+	 * Get the year of the given date.
+	 *  
+	 * @param date The date to get the year from
+	 */
+	public static int year( Date date ) {
+		return cal( date ).get( GregorianCalendar.YEAR );
 	}
 
 	/**

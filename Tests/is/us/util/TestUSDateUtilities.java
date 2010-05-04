@@ -117,22 +117,22 @@ public class TestUSDateUtilities {
 	}
 
 	@Test
-	public void isWorkday() {
+	public void isWeekday() {
 		GregorianCalendar c = (GregorianCalendar)GregorianCalendar.getInstance();
 		c.set( GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.MONDAY );
-		assertEquals( true, USDateUtilities.isWorkday( c.getTime() ) );
+		assertEquals( true, USDateUtilities.isWeekday( c.getTime() ) );
 		c.set( GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.TUESDAY );
-		assertEquals( true, USDateUtilities.isWorkday( c.getTime() ) );
+		assertEquals( true, USDateUtilities.isWeekday( c.getTime() ) );
 		c.set( GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.WEDNESDAY );
-		assertEquals( true, USDateUtilities.isWorkday( c.getTime() ) );
+		assertEquals( true, USDateUtilities.isWeekday( c.getTime() ) );
 		c.set( GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.THURSDAY );
-		assertEquals( true, USDateUtilities.isWorkday( c.getTime() ) );
+		assertEquals( true, USDateUtilities.isWeekday( c.getTime() ) );
 		c.set( GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.FRIDAY );
-		assertEquals( true, USDateUtilities.isWorkday( c.getTime() ) );
+		assertEquals( true, USDateUtilities.isWeekday( c.getTime() ) );
 		c.set( GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SATURDAY );
-		assertEquals( false, USDateUtilities.isWorkday( c.getTime() ) );
+		assertEquals( false, USDateUtilities.isWeekday( c.getTime() ) );
 		c.set( GregorianCalendar.DAY_OF_WEEK, GregorianCalendar.SUNDAY );
-		assertEquals( false, USDateUtilities.isWorkday( c.getTime() ) );
+		assertEquals( false, USDateUtilities.isWeekday( c.getTime() ) );
 	}
 
 	@Test
