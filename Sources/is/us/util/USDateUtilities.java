@@ -236,12 +236,13 @@ public class USDateUtilities {
 	}
 
 	/**
+	 * True if the given date is not on a weekend, and is not a full holiday.
 	 * 
-	 *
+	 * @param date the date to check
+	 */
 	public static boolean isWorkday( Date date ) {
-		return !USDateUtilities.isWeekend( t ) && !USHolidays.isFullHoliday( t );
+		return !USDateUtilities.isWeekend( date ) && !USHolidays.isFullHoliday( date );
 	}
-	*/
 
 	/**
 	 * Get the year of the given date.
