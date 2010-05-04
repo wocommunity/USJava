@@ -208,11 +208,10 @@ public class USDateUtilities {
 	}
 
 	/**
-	 * Indicates if the given date is between monday and friday, inclusice.
-	 * Does not take into account holidays.
+	 * True if the given date is not on a weekend.
 	 * 
 	 * @param date the date to check
-	 * @return true if and only if the given date is not a saturday or a sunday.
+	 * @return true if the given date is not a Saturday or a Sunday.
 	 */
 	public static boolean isWorkday( Date date ) {
 		GregorianCalendar c = cal( date );
@@ -224,6 +223,25 @@ public class USDateUtilities {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Get the year of the given date.
+	 *  
+	 * @param date The date to get the year from
+	 */
+	public static int year( Date date ) {
+		return cal( date ).get( GregorianCalendar.YEAR );
+	}
+
+	/**
+	 * True if the given date is on a weekend.
+	 * 
+	 * @param date the date to check
+	 * @return true if the given date is on a Saturday or a Sunday.
+	 */
+	public static boolean isWeekend( Date date ) {
+		return !isWorkday( date );
 	}
 
 	/**
@@ -260,8 +278,7 @@ public class USDateUtilities {
 
 	/**
 	 * Constructs a date at midnight on the given day.
-	 * 
-	 * ATTENTION: Month numbers are not zero-based! That means January = 1, December = 12.
+	 * Month numbers are not zero-based! That means January = 1, December = 12.
 	 */
 	public static Date date( int year, int month, int day ) {
 		GregorianCalendar calendar = (GregorianCalendar)GregorianCalendar.getInstance();

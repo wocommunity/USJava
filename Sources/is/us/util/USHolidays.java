@@ -111,10 +111,28 @@ public class USHolidays {
 	/**
 	 * Returns true if the date is a holiday
 	 */
-	public boolean isHoliday( Date date ) {
+	public static boolean isHoliday( Date date ) {
 		date = USDateUtilities.normalizeToMidnight( date );
-		List<Date> holidays = allHolidays();
-		return holidays.contains( date );
+		int year = USDateUtilities.year( date );
+		return new USHolidays( year ).allHolidays().contains( date );
+	}
+
+	/**
+	 * Returns true if the date is a full holiday
+	 */
+	public static boolean isFullHoliday( Date date ) {
+		date = USDateUtilities.normalizeToMidnight( date );
+		int year = USDateUtilities.year( date );
+		return new USHolidays( year ).fullHolidays().contains( date );
+	}
+
+	/**
+	 * Returns true if the date is a full holiday
+	 */
+	public static boolean isPartialHoliday( Date date ) {
+		date = USDateUtilities.normalizeToMidnight( date );
+		int year = USDateUtilities.year( date );
+		return new USHolidays( year ).partialHolidays().contains( date );
 	}
 
 	/**
