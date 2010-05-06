@@ -5,8 +5,6 @@ import java.util.ArrayList;
 /**
  * Calculates punishments driving under the influence of drugs
  * Based on data tables from: {@link http://www.reglugerd.is/interpro/dkm/WebGuard.nsf/538c26748c8e2a9d00256a07003476bd/498600e7cbd349360025758b0047e04d?OpenDocument}
- * 
- * @author Bjarni Sævarsson
  */
 
 public class USPunishmentCalculatorDrugs {

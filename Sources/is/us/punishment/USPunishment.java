@@ -13,8 +13,6 @@ import java.util.ArrayList;
  * - fine: The amount of the fine applied.
  * - monthsWithoutLicense: The number of months the driver will lose his/her license. 
  * - punishmentPoints: The number of points applied to your driver's license.
- * 
- * @author Hugi Þórðarson
  */
 
 public class USPunishment {

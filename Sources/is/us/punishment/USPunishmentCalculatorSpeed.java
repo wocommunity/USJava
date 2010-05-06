@@ -5,8 +5,6 @@ import java.util.ArrayList;
 /**
  * Calculates punishments for speeding.
  * Based on data tables from: {@link http://www.us.is/id/4501}
- * 
- * @author Bjarni Sævarsson
  */
 
 public class USPunishmentCalculatorSpeed {
