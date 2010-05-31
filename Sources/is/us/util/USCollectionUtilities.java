@@ -118,6 +118,7 @@ public class USCollectionUtilities {
 	 * @return a new array of type <T> containing all elements from the input arrays
 	 */
 	public static <T> T[] concat( T[]... concatArrays ) {
+		/*
 		int totalLen = 0;
 		for( T[] currArr : concatArrays ) {
 			totalLen += currArr.length;
@@ -134,5 +135,7 @@ public class USCollectionUtilities {
 		}
 
 		return result;
+		*/
+		throw new RuntimeException();
 	}
 }
