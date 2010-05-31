@@ -110,4 +110,29 @@ public class USCollectionUtilities {
 		System.arraycopy( arr, 0, newArr, 0, arr.length );
 		return newArr;
 	}
+
+	/**
+	 * Concatenates two or more arrays of same type
+	 * @param <T> Array type
+	 * @param concatArrays arrays to combine
+	 * @return an array of type <T> containing all elements from the input arrays
+	 */
+	public static <T> T[] concat( T[]... concatArrays ) {
+
+		int totalLen = 0;
+		for( T[] currArr : concatArrays ) {
+			totalLen += currArr.length;
+		}
+
+		final T[] result = (T[])java.lang.reflect.Array.newInstance( concatArrays.getClass().getComponentType(), totalLen );
+		if( concatArrays.length > 0 ) {
+			int offset = 0;
+			for( T[] currArr : concatArrays ) {
+				System.arraycopy( currArr, 0, result, offset, currArr.length );
+				offset += currArr.length;
+			}
+		}
+
+		return result;
+	}
 }
