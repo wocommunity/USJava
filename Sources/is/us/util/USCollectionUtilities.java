@@ -112,22 +112,22 @@ public class USCollectionUtilities {
 	}
 
 	/**
-	 * Concatenates two or more arrays of same type
+	 * Concatenates two or more arrays of same type into a new array
 	 * @param <T> Array type
 	 * @param concatArrays arrays to combine
-	 * @return an array of type <T> containing all elements from the input arrays
+	 * @return a new array of type <T> containing all elements from the input arrays
 	 */
 	public static <T> T[] concat( T[]... concatArrays ) {
-
 		int totalLen = 0;
 		for( T[] currArr : concatArrays ) {
 			totalLen += currArr.length;
 		}
 
-		final T[] result = (T[])java.lang.reflect.Array.newInstance( concatArrays.getClass().getComponentType(), totalLen );
+		final T[] result = Arrays.copyOf( concatArrays[0], totalLen );
 		if( concatArrays.length > 0 ) {
-			int offset = 0;
-			for( T[] currArr : concatArrays ) {
+			int offset = concatArrays[0].length;
+			for( int i = 1; i < concatArrays.length; i++ ) {
+				T[] currArr = concatArrays[i];
 				System.arraycopy( currArr, 0, result, offset, currArr.length );
 				offset += currArr.length;
 			}
