@@ -117,25 +117,25 @@ public class USCollectionUtilities {
 	 * @param concatArrays arrays to combine
 	 * @return a new array of type <T> containing all elements from the input arrays
 	 */
+	@SuppressWarnings( "unchecked" )
 	public static <T> T[] concat( T[]... concatArrays ) {
-		/*
 		int totalLen = 0;
 		for( T[] currArr : concatArrays ) {
 			totalLen += currArr.length;
 		}
 
-		final T[] result = Arrays.copyOf( concatArrays[0], totalLen );
+		Class<?> arrayType = concatArrays[0].getClass().getComponentType();
+		Object[] result = (Object[])java.lang.reflect.Array.newInstance( arrayType, totalLen );
+		//		final T[] result = Arrays.copyOf( concatArrays[0], totalLen );
 		if( concatArrays.length > 0 ) {
-			int offset = concatArrays[0].length;
-			for( int i = 1; i < concatArrays.length; i++ ) {
+			int offset = 0;//concatArrays[0].length;
+			for( int i = 0; i < concatArrays.length; i++ ) {
 				T[] currArr = concatArrays[i];
 				System.arraycopy( currArr, 0, result, offset, currArr.length );
 				offset += currArr.length;
 			}
 		}
 
-		return result;
-		*/
-		throw new RuntimeException();
+		return (T[])result;
 	}
 }
