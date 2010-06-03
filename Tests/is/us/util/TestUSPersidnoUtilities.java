@@ -130,7 +130,7 @@ public class TestUSPersidnoUtilities {
 		assertEquals( USDateUtilities.date( 2010, 11, 9 ), birthday );
 
 		birthday = USPersidnoUtilities.nextBirthday( "2105794279" );
-		assertEquals( USDateUtilities.date( 2010, 5, 21 ), birthday );
+		assertEquals( USDateUtilities.date( 2011, 5, 21 ), birthday );
 
 		birthday = USPersidnoUtilities.nextBirthday( "1203833029" );
 		assertEquals( USDateUtilities.date( 2011, 3, 12 ), birthday );
