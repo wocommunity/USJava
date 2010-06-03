@@ -52,7 +52,7 @@ public class USSMSUtilities {
 		}
 
 		if( USPhoneUtilities.validateMobileNumber( phoneNumber ) ) {
-			Map<String, String> parameters = new HashMap<String, String>();
+			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put( "L", username() );
 			parameters.put( "P", password() );
 			parameters.put( "DR", "N" );

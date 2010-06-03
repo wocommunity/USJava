@@ -262,6 +262,8 @@ public class USPersidnoUtilities {
 	}
 
 	/**
+	 * If invoked ON the person's birthday, it will return the current day.
+	 * 
 	 * @param The persidno to deduce information from.
 	 * @return The individuals next birthday, as calculated from the persidno.
 	 */
@@ -278,10 +280,12 @@ public class USPersidnoUtilities {
 
 		Integer nowDay = now.get( GregorianCalendar.DAY_OF_MONTH );
 		Integer nowMonth = now.get( GregorianCalendar.MONTH ) + 1;
-
 		Integer year = now.get( GregorianCalendar.YEAR );
 
-		if( nowMonth >= birthMonth && nowDay >= birthDay ) {
+		if( nowMonth > birthMonth ) {
+			year++;
+		}
+		if( nowMonth == birthMonth && nowDay > birthDay ) {
 			year++;
 		}
 

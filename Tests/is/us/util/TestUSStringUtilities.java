@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.*;
 
 import org.junit.Test;
 
@@ -399,13 +399,13 @@ public class TestUSStringUtilities {
 
 	@Test
 	public void constructURLStringWithParameters() {
-		HashMap<String, String> params = new HashMap<String, String>();
+		Map<String, Object> params = new HashMap<String, Object>();
 		assertEquals( USStringUtilities.constructURLStringWithParameters( null, params ), "" );
 		assertEquals( USStringUtilities.constructURLStringWithParameters( "", null ), "" );
 		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is" );
 		params.put( "a", "b" );
 		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is?a=b" );
 		params.put( "æ", "ð" );
-		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is?a=b&æ=ð" );
+		assertEquals( USStringUtilities.constructURLStringWithParameters( "www.us.is", params ), "www.us.is?a=b&amp;æ=ð" );
 	}
 }
