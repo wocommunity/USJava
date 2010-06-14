@@ -18,8 +18,8 @@ import org.junit.Test;
 
 public class TestUSStringUtilities {
 
-	private static final String[] CORRECT_EMAIL_ADDRESSES = new String[] { "joe@test.smu.voff.arg", "logi@us.is", "@.", "thisisthelongnameofmyeviltwin@thearndolswazrtnaggermoviewasnotsogreat.withthelittleguy" };
-	private static final String[] WRONG_EMAIL_ADDRESSES = new String[] { "logi@rokk", "this.is", "wonderingWhy", "forgot@thedot", "432", "#", "&", "", " ", null };
+	private static final String[] CORRECT_EMAIL_ADDRESSES = new String[] { "joe@test.smu.voff.arg", "hugi@us.is", "@.", "thisisthelongnameofmyeviltwin@thearndolswazrtnaggermoviewasnotsogreat.withthelittleguy" };
+	private static final String[] WRONG_EMAIL_ADDRESSES = new String[] { "hugi@rokk", "this.is", "wonderingWhy", "forgot@thedot", "432", "#", "&", "", " ", null };
 
 	private static final String[] PAIRS_THAT_ARE_SIMILAR = new String[] { "HUGI;H U G I", "L OG I;LOGI", "HUG1;HUGI", "YMIR;ÝM 1R" };
 	private static final String[] PAIRS_THAT_ARE_NOT_SIMILAR = new String[] { "HUGI;HUGO", "LOGO;L0GI", "SMU;VOFFVOFF" };
