@@ -138,4 +138,16 @@ public class USCollectionUtilities {
 
 		return (T[])result;
 	}
+
+	/**
+     * Puts an object into a map, if the object is not null
+     * @param map the map to set the object in
+     * @param key the key for the object
+     * @param value the object to set in the map
+     */
+    public static void setValueIfNotNull( Map<String, Object> map, String key, Object value ) {
+    	if( value != null ) {
+    		map.put( key, value );
+    	}
+    }
 }
