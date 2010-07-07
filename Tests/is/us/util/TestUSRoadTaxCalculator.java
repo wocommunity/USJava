@@ -15,54 +15,54 @@ public class TestUSRoadTaxCalculator {
 		USRoadTaxCalculator calc = null;
 
 		calc = new USRoadTaxCalculator( 500 );
-		assertEquals( 4227, calc.calculate() );
+		assertEquals( 4650, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 999 );
-		assertEquals( 8441, calc.calculate() );
+		assertEquals( 9291, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 1000 );
-		assertEquals( 8450, calc.calculate() );
+		assertEquals( 9300, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 1001 );
-		assertEquals( 8461, calc.calculate() );
+		assertEquals( 9313, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 1999 );
-		assertEquals( 19838, calc.calculate() );
+		assertEquals( 21837, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 2000 );
-		assertEquals( 19850, calc.calculate() );
+		assertEquals( 21850, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 2001 );
-		assertEquals( 19861, calc.calculate() );
+		assertEquals( 21863, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 2999 );
-		assertEquals( 31238, calc.calculate() );
+		assertEquals( 34387, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 3000 );
-		assertEquals( 31250, calc.calculate() );
+		assertEquals( 34400, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 3001 );
-		assertEquals( 34068, calc.calculate() );
+		assertEquals( 37500, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 3999 );
-		assertEquals( 34068, calc.calculate() );
+		assertEquals( 37500, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 4000 );
-		assertEquals( 34068, calc.calculate() );
+		assertEquals( 37500, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 4001 );
-		assertEquals( 36886, calc.calculate() );
+		assertEquals( 40600, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 5999 );
-		assertEquals( 39704, calc.calculate() );
+		assertEquals( 43700, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 6000 );
-		assertEquals( 39704, calc.calculate() );
+		assertEquals( 43700, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 6001 );
-		assertEquals( 42522, calc.calculate() );
+		assertEquals( 46800, calc.calculate() );
 
 		calc = new USRoadTaxCalculator( 9236 );
-		assertEquals( 50976, calc.calculate() );
+		assertEquals( 56074, calc.calculate() );
 	}
 }

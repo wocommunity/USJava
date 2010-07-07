@@ -17,12 +17,12 @@ public class USRoadTaxCalculator {
 	/**
 	 * The tax can never be lower than this amount.
 	 */
-	private static final int MIN_AMOUNT_DUE = 4227;
+	private static final int MIN_AMOUNT_DUE = 4650;
 
 	/**
 	 * The tax can never be higher than this amount.
 	 */
-	private static final int MAX_AMOUNT_DUE = 50976;
+	private static final int MAX_AMOUNT_DUE = 56074;
 
 	/**
 	 * Kilograms below or at this number cost FIRST_CATEGORY_PRICE.
@@ -37,17 +37,17 @@ public class USRoadTaxCalculator {
 	/**
 	 * Amount paid for every kg under 1000 kg.
 	 */
-	private static final double FIRST_CATEGORY_PRICE = 8.45d;
+	private static final double FIRST_CATEGORY_PRICE = 9.30d;
 
 	/**
 	 * Amount paid for every kg between 1001 and 3000 kg.
 	 */
-	private static final double SECOND_CATEGORY_PRICE = 11.40d;
+	private static final double SECOND_CATEGORY_PRICE = 12.55d;
 
 	/**
 	 * Amount paid for every started ton of the vehicle's weight after 3 tons.
 	 */
-	private static final double THIRD_CATEGORY_PRICE = 2818d;
+	private static final double THIRD_CATEGORY_PRICE = 3100d;
 
 	/**
 	 * The amount you pay is based on the weight of the vehicle.
@@ -91,7 +91,7 @@ public class USRoadTaxCalculator {
 			return MAX_AMOUNT_DUE;
 		}
 
-		return (int)Math.floor( result );
+		return (int)Math.round( result );
 	}
 
 	/**
