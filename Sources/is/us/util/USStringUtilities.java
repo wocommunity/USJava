@@ -423,7 +423,14 @@ public class USStringUtilities extends Object {
 		try {
 			url = new URL( sourceURL );
 			URLConnection conn = url.openConnection();
-			result = readStringFromInputStreamUsingEncoding( conn.getInputStream(), encoding );
+
+			if( conn != null ) {
+				InputStream in = conn.getInputStream();
+
+				if( in != null ) {
+					result = readStringFromInputStreamUsingEncoding( in, encoding );
+				}
+			}
 		}
 		catch( Exception e ) {
 			logger.error( "Error while downloading string from url: " + url, e );
