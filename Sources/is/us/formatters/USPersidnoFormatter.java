@@ -15,6 +15,7 @@ public class USPersidnoFormatter extends java.text.Format {
 	/**
 	 * Attempts to format a persidno to human readable format.
 	 */
+	@Override
 	public StringBuffer format( Object persidno, StringBuffer toAppendTo, FieldPosition pos ) {
 
 		if( persidno instanceof String )
@@ -24,8 +25,9 @@ public class USPersidnoFormatter extends java.text.Format {
 	}
 
 	/**
-	 * Parses a persidno and returns it in the standard format (no delimiters, just a string of numbers of the length 10).
+	 * Parses a persidno and returns it in the standard format (no delimiters, just a 10 number string).
 	 */
+	@Override
 	public Object parseObject( String source, ParsePosition status ) {
 		String temp = source.substring( status.getIndex() );
 		String result = USPersidnoUtilities.cleanupPersidno( temp );
