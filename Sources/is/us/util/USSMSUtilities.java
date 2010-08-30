@@ -66,7 +66,7 @@ public class USSMSUtilities {
 			}
 
 			parameters.put( "MSISDN", phoneNumber );
-			String url = USStringUtilities.constructURLStringWithParameters( baseURL(), parameters );
+			String url = USStringUtilities.constructURLStringWithParameters( baseURL(), parameters, false );
 			USStringUtilities.readStringFromURLUsingEncoding( url, null );
 		}
 	}

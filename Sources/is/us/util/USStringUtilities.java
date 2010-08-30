@@ -1047,9 +1047,10 @@ public class USStringUtilities extends Object {
 	 * 
 	 * @param baseURL The baseURL to use.
 	 * @param parameters A dictionary of URL parameters to append to the base url.
+	 * @param escapeAmpersands If tru, parameters will be separated by &amp; rather than &.
 	 * @return A complete URL
 	 */
-	public static String constructURLStringWithParameters( String baseURL, Map<String, Object> parameters ) {
+	public static String constructURLStringWithParameters( String baseURL, Map<String, Object> parameters, boolean escapeAmpersands ) {
 
 		StringBuilder b = new StringBuilder();
 
@@ -1074,12 +1075,31 @@ public class USStringUtilities extends Object {
 				}
 
 				if( i.hasNext() ) {
-					b.append( "&amp;" );
+					if( escapeAmpersands ) {
+						b.append( "&amp;" );
+					}
+					else {
+						b.append( "&" );
+					}
 				}
 			}
 		}
 
 		return b.toString();
+	}
+	
+	/**
+	 * Creates a complete url, starting with the base url, appending each parameter in query string format.
+	 * 
+	 * @param baseURL The baseURL to use.
+	 * @param parameters A dictionary of URL parameters to append to the base url.
+	 * @return A complete URL
+	 * 
+	 * @deprecated Use the version with the added "escapeAmpersands" parameter.
+	 */
+	@Deprecated
+	public static String constructURLStringWithParameters( String baseURL, Map<String, Object> parameters ) {
+		return constructURLStringWithParameters(baseURL, parameters, true );
 	}
 
 	/**
