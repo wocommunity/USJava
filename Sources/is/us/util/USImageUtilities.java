@@ -42,6 +42,24 @@ public class USImageUtilities {
 	 * Scales the image in imageData to the size given in width and height.
 	 * 
 	 * @param imageData The image data to scale.
+	 * @param scale Of the new height and width.
+	 * @param qualityPercent quality percentage, if the given codec is JPEG.
+	 * @param codecType The Codec to use.
+	 */
+	public static byte[] scale( byte[] imageData, int percents, int qualityPercent, CodecType codecType ) {
+		BufferedImage inImage = bufferedImageFromData( imageData );
+		double p = percents / 100.0;
+		int width = (int)((double)inImage.getWidth() * p);
+		int height = (int)((double)inImage.getHeight() * p);
+
+		BufferedImage outImage = scale( inImage, width, height );
+		return encode( outImage, qualityPercent, codecType );
+	}
+
+	/**
+	 * Scales the image in imageData to the size given in width and height.
+	 * 
+	 * @param imageData The image data to scale.
 	 * @param width The new width.
 	 * @param height The new height.
 	 * @param qualityPercent quality percentage, if the given codec is JPEG.
@@ -61,16 +79,63 @@ public class USImageUtilities {
 	 * @param height The new height
 	 */
 	private static BufferedImage scale( BufferedImage image, int width, int height ) {
-
 		if( image == null ) {
 			return null;
 		}
-
 		Image scaledImage = image.getScaledInstance( width, height, BufferedImage.SCALE_SMOOTH );
 		BufferedImage outImage = new BufferedImage( width, height, BufferedImage.TYPE_INT_RGB );
 		Graphics2D g2 = outImage.createGraphics();
 		g2.drawImage( scaledImage, 0, 0, null );
 		return outImage;
+	}
+
+	/**
+	 * Rotates the given image according to <b>rotateDegrees</b>
+	 * 
+	 * @param imageData the image data to rotate
+	 * @param rotateDegrees rotate angle in degrees
+	 * @param qualityPercent if quality compression is not available in selected <b>codecType</b> then this parameter is ignored
+	 * @param codecType image codec to use
+	 * @return a byte array containing the result image data
+	 */
+	public static byte[] rotate( byte[] imageData, int rotateDegrees, int qualityPercent, CodecType codecType ) {
+		BufferedImage inImage = bufferedImageFromData( imageData );
+		BufferedImage outImage = rotate( inImage, rotateDegrees );
+		inImage.flush();
+		return encode( outImage, qualityPercent, codecType );
+	}
+
+	/**
+	 * Rotates the given image according to <b>rotateDegrees</b>
+	 * @param image {@link BufferedImage} to rotate
+	 * @param rotateDegrees degrees of rotation
+	 * @return a new rotated {@link BufferedImage} object
+	 */
+	public static BufferedImage rotate( BufferedImage image, int rotateDegrees ) {
+		int width = image.getWidth();
+		int height = image.getHeight();
+		double angleRadians = Math.toRadians( rotateDegrees );
+
+		// calculate new image widths
+		double sin = Math.abs( Math.sin( angleRadians ) );
+		double cos = Math.abs( Math.cos( angleRadians ) );
+		int newWidth = (int)Math.floor( width * cos + height * sin );
+		int newHeight = (int)Math.floor( height * cos + width * sin );
+
+		BufferedImage result = new BufferedImage( newWidth, newHeight, BufferedImage.TYPE_INT_RGB );
+		Graphics2D g = result.createGraphics();
+
+		// white background
+		g.setBackground( Color.white );
+		g.fillRect( 0, 0, newWidth, newHeight );
+
+		// rotate old image on image center point
+		g.translate( (newWidth - width) / 2, (newHeight - height) / 2 );
+		g.rotate( angleRadians, width / 2, height / 2 );
+
+		g.drawRenderedImage( image, null );
+		image.flush();
+		return result;
 	}
 
 	/**
@@ -201,8 +266,10 @@ public class USImageUtilities {
 			finally {
 				os.close();
 			}
-
-			return os.toByteArray();
+			byte[] arr = os.toByteArray();
+			os.flush();
+			os = null;
+			return arr;
 		}
 		catch( IOException e ) {
 			logger.error( "Error while jpeg encoding buffered image", e );
