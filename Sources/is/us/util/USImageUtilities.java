@@ -38,6 +38,24 @@ public class USImageUtilities {
 	 */
 	private USImageUtilities() {}
 
+	public static byte[] read( String fileName ) {
+		File inputFile = new File( fileName );
+		if( !inputFile.exists() || !inputFile.canRead() ) {
+			return null;
+		}
+		BufferedImage buffImage;
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		try {
+			buffImage = ImageIO.read( inputFile );
+			ImageIO.write( buffImage, "JPEG", baos );
+			buffImage.flush();
+		}
+		catch( IOException e ) {
+			return null;
+		}
+		return baos.toByteArray();
+	}
+
 	/**
 	 * Scales the image in imageData to the size given in width and height.
 	 * 
