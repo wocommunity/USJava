@@ -10,7 +10,7 @@ import org.slf4j.*;
 
 /**
  * Various utility methods for handling strings.
- *
+ * 
  * @author Hugi Þórðarson
  */
 
@@ -57,8 +57,7 @@ public class USStringUtilities extends Object {
 	private static final String[] SIMILAR_CHARACTERS = new String[] { "A;Á", "E;É", "I;Í;1", "I;Í;1", "O;Ó;0", "U;Ú", "Y;Ý" };
 
 	/**
-	 * Most common HTML entity escape characters..
-	 * Unicode int value = { Unicode hex value, Character, HTML Entity }
+	 * Most common HTML entity escape characters.. Unicode int value = { Unicode hex value, Character, HTML Entity }
 	 */
 	private static final Map<Integer, String[]> escapeChart = new HashMap<Integer, String[]>();
 
@@ -180,7 +179,7 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * This method return true if a string is not null, and not equal to the empty String ""
-	 *
+	 * 
 	 * @param string The string to check
 	 */
 	public static final boolean stringHasValue( String string ) {
@@ -258,7 +257,7 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * Converts bytes to a String using the specified encoding
-	 *
+	 * 
 	 * @param sourceData The data object to read from
 	 * @param encoding The encoding to use, use the standard Java encoding names specified in java.lang.String
 	 */
@@ -282,8 +281,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Indicates if two characters are "similar", in the sense that they could be difficult
-	 * for humans to differentiate between.
+	 * Indicates if two characters are "similar", in the sense that they could be difficult for humans to differentiate between.
 	 */
 	public static boolean areSimilar( char char1, char char2 ) {
 		for( String nextSet : SIMILAR_CHARACTERS ) {
@@ -298,8 +296,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Indicates if two strings are "similar", in the sense that they could be
-	 * difficult for humans to differentiate between.
+	 * Indicates if two strings are "similar", in the sense that they could be difficult for humans to differentiate between.
 	 */
 	public static boolean areSimilar( String string1, String string2 ) {
 
@@ -331,9 +328,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * This method will adjust a String to a certain length. If the string is
-	 * too short, it pads it on the left. If the string is too long,
-	 * it will cut of the left end of it.
+	 * This method will adjust a String to a certain length. If the string is too short, it pads it on the left. If the string is too long, it will cut of the left end of it.
 	 * 
 	 * Created to make creation of fixed length string easier.
 	 */
@@ -357,9 +352,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * This method will adjust a String to a certain length. If the string is
-	 * too short, it pads it on the right. If the string is too long,
-	 * it will cut of the right end of it.
+	 * This method will adjust a String to a certain length. If the string is too short, it pads it on the right. If the string is too long, it will cut of the right end of it.
 	 * 
 	 * Created to make creation of fixed length string easier.
 	 */
@@ -442,6 +435,7 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * Reads the given string from an Inputstream, using the given encoding.
+	 * 
 	 * @param encoding The encoding of the data in the input stream
 	 */
 	public static String readStringFromInputStreamUsingEncoding( InputStream in, String encoding ) {
@@ -485,7 +479,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Reads a string from a file, using the given encoding. 
+	 * Reads a string from a file, using the given encoding.
 	 */
 	public static String readStringFromFileUsingEncoding( File sourceFile, String encoding ) {
 
@@ -498,8 +492,25 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
+	 * Constructs a string from a input stream using the given encoding, if no encoding is given uses UTF-8
+	 * 
+	 * @param in the stream to read the string from
+	 * @param encoding the encoding to use
+	 * @return the string constructed from the given stream using the given encoding.
+	 */
+	public static String readStringFromStreamUsingEncoding( InputStream in, String encoding ) {
+		if( encoding == null ) {
+			encoding = UTF_8;
+		}
+
+		byte[] bytes = USDataUtilities.readBytesFromStream( in );
+		return stringFromDataUsingEncoding( bytes, encoding );
+
+	}
+
+	/**
 	 * Attempts to format a user entered string to the standard used in the DB.
-	 *
+	 * 
 	 * @param permno The permno to format.
 	 */
 	public static String cleanupPermno( String permno ) {
@@ -515,7 +526,7 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * Attempts to format a string to the standard used in the DB.
-	 *
+	 * 
 	 * @param regno The permno to format.
 	 */
 	public static String cleanupRegno( String regno ) {
@@ -623,7 +634,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Replaces variable markers in originalString with the objects in the object 
+	 * Replaces variable markers in originalString with the objects in the object
 	 */
 	public static String stringWithFormat( String originalString, Object... objects ) {
 
@@ -648,7 +659,7 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * This method converts all instances of \n in a string to the HTML-equivalent <br />
-	 *
+	 * 
 	 * @param string The string to work on
 	 */
 	public static String convertBreakString( String string ) {
@@ -656,9 +667,8 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * This method checks the ending of a string in a case insensitive manner.
-	 * If either of the parameters passed is null, "false" is returned.
-	 *
+	 * This method checks the ending of a string in a case insensitive manner. If either of the parameters passed is null, "false" is returned.
+	 * 
 	 * @param aString The string to check
 	 * @param suffix The suffix to check for
 	 */
@@ -676,7 +686,7 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * Determines the last element of a path, i.e. a filename.
-	 *
+	 * 
 	 * @param sourceURL The URL to download from
 	 * @param encoding The encoding to use
 	 */
@@ -696,8 +706,7 @@ public class USStringUtilities extends Object {
 	/**
 	 * Goes through a string and performs the following changes:
 	 * 
-	 *  - Activates URLs.
-	 *  - Inserts br-tags
+	 * - Activates URLs. - Inserts br-tags
 	 */
 	public static String htmlify( String originalString ) {
 
@@ -737,7 +746,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Attempts to fix an URL-string entered by a user. 
+	 * Attempts to fix an URL-string entered by a user.
 	 */
 	public static String fixUrl( String url ) {
 
@@ -779,7 +788,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Abbreviates a string if it exceeds length and appends three dots. 
+	 * Abbreviates a string if it exceeds length and appends three dots.
 	 */
 	public static String abbreviate( String string, int length ) {
 
@@ -799,22 +808,20 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Formats bytes into human readable representation of it.
-	 * Using all default parameters.
+	 * Formats bytes into human readable representation of it. Using all default parameters.
 	 * 
-	 * @param 	bytes 			The bytes to format
-	 * @return 	A formated String representation of the bytes
+	 * @param bytes The bytes to format
+	 * @return A formated String representation of the bytes
 	 */
 	public static String formatBytes( double bytes ) {
 		return formatBytes( bytes, 0, 2, "", false );
 	}
 
 	/**
-	 * Formats bytes into human readable representation of it.
-	 * Using all default parameters.
+	 * Formats bytes into human readable representation of it. Using all default parameters.
 	 * 
-	 * @param 	bytes 			The bytes to format
-	 * @return 	A formated String representation of the bytes
+	 * @param bytes The bytes to format
+	 * @return A formated String representation of the bytes
 	 */
 	public static String formatBytes( double bytes, boolean showFullName ) {
 		String devider = (showFullName) ? " " : "";
@@ -824,10 +831,10 @@ public class USStringUtilities extends Object {
 	/**
 	 * Formats bytes into human readable representation of it.
 	 * 
-	 * @param 	bytes 			The bytes to format
-	 * @param 	minFractions 	Sets the minimum number of digits allowed in the fraction portion of a number
-	 * @param 	maxFractions 	Sets the maximum number of digits allowed in the fraction portion of a number
-	 * @return 	A formated String representation of the bytes
+	 * @param bytes The bytes to format
+	 * @param minFractions Sets the minimum number of digits allowed in the fraction portion of a number
+	 * @param maxFractions Sets the maximum number of digits allowed in the fraction portion of a number
+	 * @return A formated String representation of the bytes
 	 */
 	public static String formatBytes( double bytes, int minFractions, int maxFractions ) {
 		return formatBytes( bytes, minFractions, maxFractions, "", false );
@@ -836,11 +843,11 @@ public class USStringUtilities extends Object {
 	/**
 	 * Formats bytes into human readable representation of it.
 	 * 
-	 * @param 	bytes 			The bytes to format
-	 * @param 	minFractions 	Sets the minimum number of digits allowed in the fraction portion of a number
-	 * @param 	maxFractions 	Sets the maximum number of digits allowed in the fraction portion of a number
-	 * @param 	nrNameDivider 	The string placed between the formated number and the binary symbol/name
-	 * @return 	A formated String representation of the bytes
+	 * @param bytes The bytes to format
+	 * @param minFractions Sets the minimum number of digits allowed in the fraction portion of a number
+	 * @param maxFractions Sets the maximum number of digits allowed in the fraction portion of a number
+	 * @param nrNameDivider The string placed between the formated number and the binary symbol/name
+	 * @return A formated String representation of the bytes
 	 */
 	public static String formatBytes( double bytes, int minFractions, int maxFractions, String nrNameDivider ) {
 		return formatBytes( bytes, minFractions, maxFractions, nrNameDivider, false );
@@ -849,12 +856,12 @@ public class USStringUtilities extends Object {
 	/**
 	 * Formats bytes into human readable representation of it.
 	 * 
-	 * @param 	bytes 			The bytes to format
-	 * @param 	minFractions 	Sets the minimum number of digits allowed in the fraction portion of a number
-	 * @param 	maxFractions 	Sets the maximum number of digits allowed in the fraction portion of a number
-	 * @param 	nrNameDivider 	The string placed between the formated number and the binary symbol/name
-	 * @param 	showFullName 	Should the full binary name be shown
-	 * @return 	A formated String representation of the bytes
+	 * @param bytes The bytes to format
+	 * @param minFractions Sets the minimum number of digits allowed in the fraction portion of a number
+	 * @param maxFractions Sets the maximum number of digits allowed in the fraction portion of a number
+	 * @param nrNameDivider The string placed between the formated number and the binary symbol/name
+	 * @param showFullName Should the full binary name be shown
+	 * @return A formated String representation of the bytes
 	 */
 	public static String formatBytes( double bytes, int minFractions, int maxFractions, String nrNameDivider, boolean showFullName ) {
 		int divCounter = 0;
@@ -876,8 +883,8 @@ public class USStringUtilities extends Object {
 	/**
 	 * Formats double into human readable string representation of it.
 	 * 
-	 * @param 	number 				The number to be formated
-	 * @return 	A formated String representation of the double number
+	 * @param number The number to be formated
+	 * @return A formated String representation of the double number
 	 */
 	public static String formatDouble( double number ) {
 		return formatDouble( number, 0, 2, false );
@@ -886,9 +893,9 @@ public class USStringUtilities extends Object {
 	/**
 	 * Formats double into human readable string representation of it.
 	 * 
-	 * @param 	number 				The number to be formated
-	 * @param 	nrOfDecimalPlaces 	Number of decimal places to round to
-	 * @return 	A formated String representation of the double number
+	 * @param number The number to be formated
+	 * @param nrOfDecimalPlaces Number of decimal places to round to
+	 * @return A formated String representation of the double number
 	 */
 	public static String formatDouble( double number, int nrOfDecimalPlaces ) {
 		return formatDouble( number, nrOfDecimalPlaces, nrOfDecimalPlaces, false );
@@ -897,10 +904,10 @@ public class USStringUtilities extends Object {
 	/**
 	 * Formats double into human readable string representation of it.
 	 * 
-	 * @param 	number 				The number to be formated
-	 * @param 	nrOfDecimalPlaces 	Number of decimal places to round to
-	 * @param 	forceDecimalPlaces 	Should the decimal places be forced, e.g. 1.000,00
-	 * @return 	A formated String representation of the double number
+	 * @param number The number to be formated
+	 * @param nrOfDecimalPlaces Number of decimal places to round to
+	 * @param forceDecimalPlaces Should the decimal places be forced, e.g. 1.000,00
+	 * @return A formated String representation of the double number
 	 */
 	public static String formatDouble( double number, int nrOfDecimalPlaces, boolean forceDecimalPlaces ) {
 		return formatDouble( number, 0, nrOfDecimalPlaces, forceDecimalPlaces );
@@ -909,10 +916,10 @@ public class USStringUtilities extends Object {
 	/**
 	 * Formats double into human readable string representation of it.
 	 * 
-	 * @param 	number 				The number to be formated
-	 * @param 	nrOfDecimalPlaces 	Number of decimal places to round to
-	 * @param 	forceDecimalPlaces 	Should the decimal places be forced, e.g. 1.000,00
-	 * @return 	A formated String representation of the double number
+	 * @param number The number to be formated
+	 * @param nrOfDecimalPlaces Number of decimal places to round to
+	 * @param forceDecimalPlaces Should the decimal places be forced, e.g. 1.000,00
+	 * @return A formated String representation of the double number
 	 */
 	public static String formatDouble( double number, int nrOfDecimalPlaces, int maxNrOfDecimalPlaces, boolean forceDecimalPlaces ) {
 		DecimalFormat fmt = new DecimalFormat( ICELANDIC_DECIMAL_FORMAT_PATTERN, ICELANDIC_DECIMAL_FORMAT_SYMBOLS );
@@ -936,12 +943,10 @@ public class USStringUtilities extends Object {
 
 	/**
 	 * Formats the user entered number to the database standard format.
-	 *  
-	 *  Numbers:
-	 *  - Contain 6 characters, 3 numeric, then three upper-case alphabetic characters (123ABC).
-	 *  - Contain only alphanumeric characters.
-	 *  
-	 *  Returns null if the number is not valid!
+	 * 
+	 * Numbers: - Contain 6 characters, 3 numeric, then three upper-case alphabetic characters (123ABC). - Contain only alphanumeric characters.
+	 * 
+	 * Returns null if the number is not valid!
 	 */
 	public static String cleanupPreRegistrationNumber( String s ) {
 
@@ -1087,7 +1092,7 @@ public class USStringUtilities extends Object {
 
 		return b.toString();
 	}
-	
+
 	/**
 	 * Creates a complete url, starting with the base url, appending each parameter in query string format.
 	 * 
@@ -1099,17 +1104,17 @@ public class USStringUtilities extends Object {
 	 */
 	@Deprecated
 	public static String constructURLStringWithParameters( String baseURL, Map<String, Object> parameters ) {
-		return constructURLStringWithParameters(baseURL, parameters, true );
+		return constructURLStringWithParameters( baseURL, parameters, true );
 	}
 
 	/**
-	* Replaces a given string by another string in a string.
-	* 
-	* @param old string to be replaced
-	* @param newString to be inserted
-	* @param buffer string to have the replacement done on it
-	* @return string after having all of the replacement done.
-	*/
+	 * Replaces a given string by another string in a string.
+	 * 
+	 * @param old string to be replaced
+	 * @param newString to be inserted
+	 * @param buffer string to have the replacement done on it
+	 * @return string after having all of the replacement done.
+	 */
 	private static String replaceStringByStringInString( String old, String newString, String buffer ) {
 		int begin, end;
 		int oldLength = old.length();
@@ -1135,8 +1140,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Counts the number of occurrences of a particular
-	 * <code>char</code> in a given string.
+	 * Counts the number of occurrences of a particular <code>char</code> in a given string.
 	 * 
 	 * @param c char to count in string
 	 * @param s string to look for specified char in.
@@ -1154,7 +1158,7 @@ public class USStringUtilities extends Object {
 	}
 
 	/**
-	 * Checks if the specified String contains only digits. 
+	 * Checks if the specified String contains only digits.
 	 * 
 	 * @param aString the string to check
 	 * @return true if the string contains only digits, false otherwise
