@@ -2,12 +2,12 @@ package is.us.util;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 import org.slf4j.*;
 
 /**
- * Contains various utility methods for handling data,
- * reading and writing data to and from disks or over a network connection etc.
+ * Contains various utility methods for handling data, reading and writing data to and from disks or over a network connection etc.
  * 
  * @author Hugi Þórðarson
  */
@@ -26,7 +26,7 @@ public class USDataUtilities {
 
 	/**
 	 * Reads a file and returns a byte array.
-	 *
+	 * 
 	 * @param sourceFile The file to read from
 	 */
 	public static byte[] readBytesFromFile( File sourceFile ) {
@@ -60,9 +60,30 @@ public class USDataUtilities {
 		}
 	}
 
+	public static byte[] readBytesFromStream( InputStream in ) {
+		List<Byte> bytes = new ArrayList<Byte>();
+
+		int b = 0;
+		try {
+			while( (b = in.read()) != -1 ) {
+				bytes.add( new Byte( (byte)b ) );
+			}
+		}
+		catch( IOException e ) {
+			logger.debug( "Failed to read data from input stream", e );
+			return null;
+		}
+
+		byte[] rslt = new byte[bytes.size()];
+		for( int i = 0; i < bytes.size(); i++ ) {
+			rslt[i] = bytes.get( i );
+		}
+		return rslt;
+	}
+
 	/**
 	 * Writes a byte array to a file.
-	 *
+	 * 
 	 * @param destination The file to write to
 	 */
 	public static void writeBytesToFile( byte[] bytes, File destination ) {
@@ -78,7 +99,7 @@ public class USDataUtilities {
 	}
 
 	/**
-	 * Downloads a document from the given URL. 
+	 * Downloads a document from the given URL.
 	 * 
 	 * @param sourceURL The URL to download data from.
 	 */
