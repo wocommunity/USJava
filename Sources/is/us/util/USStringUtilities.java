@@ -59,7 +59,7 @@ public class USStringUtilities extends Object {
 	/**
 	 * Most common HTML entity escape characters.. Unicode int value = { Unicode hex value, Character, HTML Entity }
 	 */
-	private static final Map<Integer, String[]> escapeChart = new HashMap<Integer, String[]>();
+	public static final Map<Integer, String[]> escapeChart = new HashMap<Integer, String[]>();
 
 	static {
 		escapeChart.put( 60, new String[] { "003C", "<", "&lt;" } );
@@ -586,6 +586,23 @@ public class USStringUtilities extends Object {
 		}
 
 		return i;
+	}
+
+	/**
+	 * Checks if all the objects in the given array are null.
+	 * 
+	 * @param objects The objects to check. Should never be null.
+	 */
+	public static boolean allStringsHaveValue( String... strings ) {
+		if( strings == null ) {
+			return false;
+		}
+		for( String s : strings ) {
+			if( !USStringUtilities.stringHasValue( s ) )
+				return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -1171,5 +1188,19 @@ public class USStringUtilities extends Object {
 				return false;
 		}
 		return true;
+	}
+
+	public static String camelCase( String text ) {
+		String[] whitespaces = new String[] { " " };
+		String ret = text;
+		for( int i = 0; i < whitespaces.length; i++ ) {
+			String[] tokens = ret.split( whitespaces[i] );
+			ret = "";
+			for( int j = 0; j < tokens.length; j++ ) {
+				ret += tokens[j].substring( 0, 1 ).toUpperCase() + tokens[j].substring( 1 ).toLowerCase();
+			}
+		}
+
+		return ret;
 	}
 }
