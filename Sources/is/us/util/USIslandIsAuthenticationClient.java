@@ -108,26 +108,6 @@ public class USIslandIsAuthenticationClient {
 	private boolean samlHasErrorStatus( Map<String, String> samlInfo ) {
 		return (samlInfo.containsKey( STATUS_CODE_KEY ) && !samlInfo.get( STATUS_CODE_KEY ).equals( "0" ));
 	}
-	/***
-	 * 
-	 * @return authentication method used f.ex RSK/CERTIFICATE
-	 */
-	public String authmethod(){
-		Map<String, String> samlInfo = samlInfo();
-		if( (samlInfo == null) || !samlInfo.containsKey( AUTHMETHOD_KEY ) || samlHasErrorStatus( samlInfo ) ) {
-			String errorMessage;
-
-			if( samlInfo == null ) {
-				errorMessage = "samlInfo == null";
-			}
-			else {
-				errorMessage = "AUTHMETHOD_KEY = " + samlInfo.get( AUTHMETHOD_KEY ) + " status.code = " + samlInfo.get( STATUS_CODE_KEY );
-			}
-			handleError( errorMessage );
-		}
-		return samlInfo.get(AUTHMETHOD_KEY);
-	}
-	
 	
 	/**
 	 * @return The user persidno from the saml response
@@ -174,7 +154,11 @@ public class USIslandIsAuthenticationClient {
 		Document docXML = null;
 
 		try {
-			docXML = parser.build( sendSoapRequest(), "" );
+			
+			String response = sendSoapRequest();
+			System.out.println(response);
+			docXML = parser.build( response, "" );
+		   
 			logger.debug( "Island.is xml response body: {}", docXML.toXML() );
 
 			// parse the whole soap message
@@ -223,15 +207,16 @@ public class USIslandIsAuthenticationClient {
 	 */
 	private void checkSamlForErrors( Map<String, String> info, Element soapResponseCertSaml ) {
 		Element status = soapResponseCertSaml.getFirstChildElement( "status" );
-
+        System.out.println(status.toXML());
 		String type = status.getChildElements( "type" ).get( 0 ).getValue();
 		String code = status.getChildElements( "code" ).get( 0 ).getValue();
 		String msg = status.getChildElements( "message" ).get( 0 ).getValue();
 		info.put( "status.type", type );
 		info.put( STATUS_CODE_KEY, code );
 		info.put( "status.message", msg );
+		System.out.println("Texti BLA" + msg);
 		if( !code.equals( "0" ) ) {
-			handleError( "SAML message is not valid!" );
+			handleError( "SAML message is not valid! A" );
 		}
 	}
 
@@ -280,6 +265,7 @@ public class USIslandIsAuthenticationClient {
 		// If there are no child elements the stuff is html encoded, and needs to have a separate parse
 		if( saml.getChildElements().size() == 0 ) {
 			try {
+				
 				docXML = parser.build( saml.getValue(), "" );
 				assertion = docXML.getRootElement();
 
@@ -296,7 +282,7 @@ public class USIslandIsAuthenticationClient {
 						}
 					}
 					if( !assertFound ) {
-						handleError( "island.is SAML message is not valid!" );
+						handleError( "island.is SAML message is not valid!B" );
 					}
 				}
 			}
@@ -402,7 +388,8 @@ public class USIslandIsAuthenticationClient {
 				logger.error( "Failed to close island.is communications socket", e );
 			}
 		}
-
+		
+		
 		return response.toString();
 	}
 
