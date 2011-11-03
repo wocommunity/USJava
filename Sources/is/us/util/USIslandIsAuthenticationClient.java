@@ -40,12 +40,14 @@ public class USIslandIsAuthenticationClient {
 	private static final String TOKEN_KEY = "TOKEN";
 	private static final String SSN_KEY = "SSN";
 	private static final String SYSID_KEY = "SYSID";
+	private static final String AUTHMETHOD_KEY ="AUTHMETHOD";
 	private static final String STATUS_CODE_KEY = "status.code";
 
 	private static final String CRLF = "\r\n";
 	private static final String USER_AGENT_NAME = "is.us.island.authenticate";
 	private static final String CONTENT_TYPE = "text/xml";
 	private static final String SERVER = "egov.webservice.is";
+
 	private static final int PORT = 443;
 	private static final int SOCKET_TIMEOUT_MS = 4000;
 
@@ -106,7 +108,27 @@ public class USIslandIsAuthenticationClient {
 	private boolean samlHasErrorStatus( Map<String, String> samlInfo ) {
 		return (samlInfo.containsKey( STATUS_CODE_KEY ) && !samlInfo.get( STATUS_CODE_KEY ).equals( "0" ));
 	}
+	/***
+	 * 
+	 * @return authentication method used f.ex RSK/CERTIFICATE
+	 */
+	public String authmethod(){
+		Map<String, String> samlInfo = samlInfo();
+		if( (samlInfo == null) || !samlInfo.containsKey( AUTHMETHOD_KEY ) || samlHasErrorStatus( samlInfo ) ) {
+			String errorMessage;
 
+			if( samlInfo == null ) {
+				errorMessage = "samlInfo == null";
+			}
+			else {
+				errorMessage = "AUTHMETHOD_KEY = " + samlInfo.get( AUTHMETHOD_KEY ) + " status.code = " + samlInfo.get( STATUS_CODE_KEY );
+			}
+			handleError( errorMessage );
+		}
+		return samlInfo.get(AUTHMETHOD_KEY);
+	}
+	
+	
 	/**
 	 * @return The user persidno from the saml response
 	 * @throws USIslandIsAuthenticationException if there is an error getting
@@ -472,6 +494,7 @@ public class USIslandIsAuthenticationClient {
 	private void handleError( String msg ) {
 		logger.error( msg );
 		throw new USIslandIsAuthenticationException( msg );
+		
 	}
 
 	/**
