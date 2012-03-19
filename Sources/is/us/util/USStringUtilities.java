@@ -1006,7 +1006,7 @@ public class USStringUtilities extends Object {
 			htmlEntities[entityIdx++] = new String[] { entryVal[1], entryVal[2] };
 		}
 		for( int e = 0; e < htmlEntities.length; e++ ) {
-			//			System.out.println( htmlEntities[e][1] );
+			// System.out.println( htmlEntities[e][1] );
 		}
 		int lastIdx = 0;
 		// go through the string and find an entitie start char
@@ -1044,16 +1044,17 @@ public class USStringUtilities extends Object {
 	 * @param s String to parse
 	 * @return String with escaped non-ascii characters
 	 */
-	public static final String escapeHTML( String s ) {
+	public static final String escapeHTML( Object s ) {
 
 		if( s == null ) {
 			return "";
 		}
 
+		String str = s.toString();
 		StringBuilder buffer = new StringBuilder();
-		int n = s.length();
+		int n = str.length();
 		for( int i = 0; i < n; i++ ) {
-			char c = s.charAt( i );
+			char c = str.charAt( i );
 			if( escapeChart.containsKey( (int)c ) ) {
 				buffer.append( escapeChart.get( (int)c )[2] );
 			}
